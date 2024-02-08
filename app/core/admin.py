@@ -6,7 +6,8 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 
 from core import models
-from reservoir.models import ReservoirMeasurement
+from reservoir.models.reservoir_measurement import ReservoirMeasurement
+from reservoir.models.well import Well
 
 
 class UserAdmin(BaseUserAdmin):
@@ -50,3 +51,4 @@ admin.site.register(models.Recipe)
 admin.site.register(models.Tag)
 admin.site.register(models.Ingredient)
 admin.site.register(ReservoirMeasurement)
+admin.site.register(Well)

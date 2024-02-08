@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from reservoir.models import ReservoirMeasurement
+
+from reservoir.models.reservoir_measurement import ReservoirMeasurement
 
 
 class ReservoirMeasurementSerializer(serializers.ModelSerializer):
@@ -22,4 +23,5 @@ class ReservoirMeasurementSerializer(serializers.ModelSerializer):
             'is_prev_shutin',
             'pressure_std',
             'derivative_std',
+            'well_id'
         ]

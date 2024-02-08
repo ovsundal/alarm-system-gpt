@@ -18,6 +18,7 @@ class ReservoirMeasurement(models.Model):
     is_prev_shutin = models.BooleanField()
     pressure_std = models.FloatField()
     derivative_std = models.FloatField()
+    well_id = models.FloatField()
 
     def __str__(self):
         return (f"Measurement from {self.start_timestamp} to "

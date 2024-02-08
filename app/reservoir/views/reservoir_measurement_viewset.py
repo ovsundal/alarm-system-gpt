@@ -5,33 +5,33 @@ from rest_framework.mixins import (
 )
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-
-from reservoir.models import ReservoirMeasurement
-from reservoir.serializers import ReservoirMeasurementSerializer
-from reservoir.services import process_reservoir_data
+from reservoir.models.reservoir_measurement import ReservoirMeasurement
+from reservoir.serializers.reservoir_measurement_serializer import (
+    ReservoirMeasurementSerializer)
+from reservoir.services.reservoir_measurement_services import (
+    filter_reservoir_data)
 
 
 class ReservoirMeasurementViewSet(
     GenericViewSet,  # generic view functionality
-    # CreateModelMixin,  # handles POSTs
     RetrieveModelMixin,  # handles GETs for 1 Company
-    # UpdateModelMixin,  # handles PUTs and PATCHes
-    # ListModelMixin      # handles GETs for many Companies
 ):
     serializer_class = ReservoirMeasurementSerializer
     queryset = ReservoirMeasurement.objects.all()
     lookup_field = 'well_id'
 
     def retrieve(self, request, *args, **kwargs):
-        well_id = kwargs.get('well_id')
+        well_id = kwargs.get(self.lookup_field)
 
         with open('reservoir/static_reservoir_data.json', 'r') as f:
             static_reservoir_data = json.load(f)
 
-        data = static_reservoir_data.get(well_id)
-        if data is None:
-            return Response({"message": "Data not found"}, status=404)
+        filtered_data = [item for item in static_reservoir_data
+                         if item[self.lookup_field] == int(well_id)]
 
-        processed_data = process_reservoir_data(data)
+        if len(filtered_data) == 0:
+            return Response([])
+
+        processed_data = filter_reservoir_data(filtered_data)
 
         return Response(processed_data)
