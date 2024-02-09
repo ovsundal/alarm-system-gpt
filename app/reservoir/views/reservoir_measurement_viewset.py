@@ -23,7 +23,7 @@ class ReservoirMeasurementViewSet(
     def retrieve(self, request, *args, **kwargs):
         well_id = kwargs.get(self.lookup_field)
 
-        with open('reservoir/static_reservoir_data.json', 'r') as f:
+        with open('reservoir/data/static_reservoir_data.json', 'r') as f:
             static_reservoir_data = json.load(f)
 
         filtered_data = [item for item in static_reservoir_data
