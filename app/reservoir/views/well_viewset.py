@@ -12,7 +12,7 @@ class WellViewSet(GenericViewSet):
     def list(self, request):
         search_value = request.query_params.get(self.lookup_field, '')
 
-        with open('reservoir/static_well_data.json', 'r') as f:
+        with open('reservoir/data/static_well_data.json', 'r') as f:
             static_well_data = json.load(f)
 
         filtered_data = [item for item in static_well_data
