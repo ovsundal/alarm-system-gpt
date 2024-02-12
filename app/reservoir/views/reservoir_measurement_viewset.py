@@ -9,12 +9,15 @@ from reservoir.models.reservoir_measurement import ReservoirMeasurement
 from reservoir.serializers.reservoir_measurement_serializer import (
     ReservoirMeasurementSerializer)
 from reservoir.services.reservoir_measurement_services import (
-    filter_reservoir_data)
+    filter_reservoir_data,
+    add_alarm_limits_to_reservoir_data,
+    add_time_passed_hr
+)
 
 
 class ReservoirMeasurementViewSet(
-    GenericViewSet,  # generic view functionality
-    RetrieveModelMixin,  # handles GETs for 1 Company
+    GenericViewSet,
+    RetrieveModelMixin,
 ):
     serializer_class = ReservoirMeasurementSerializer
     queryset = ReservoirMeasurement.objects.all()
@@ -22,6 +25,9 @@ class ReservoirMeasurementViewSet(
 
     def retrieve(self, request, *args, **kwargs):
         well_id = kwargs.get(self.lookup_field)
+        print(request)
+        alarm_lower_limit = request.query_params.get('lowerAlarm')
+        alarm_upper_limit = request.query_params.get('upperAlarm')
 
         with open('reservoir/data/static_reservoir_data.json', 'r') as f:
             static_reservoir_data = json.load(f)
@@ -32,6 +38,13 @@ class ReservoirMeasurementViewSet(
         if len(filtered_data) == 0:
             return Response([])
 
-        processed_data = filter_reservoir_data(filtered_data)
+        filtered_sorted_data = sorted(filtered_data,
+                                      key=lambda x: x['start_timestamp']
+                                      )
+
+        processed_data = filter_reservoir_data(filtered_sorted_data)
+        processed_data = add_time_passed_hr(processed_data)
+        processed_data = add_alarm_limits_to_reservoir_data(
+            processed_data, alarm_lower_limit, alarm_upper_limit)
 
         return Response(processed_data)
