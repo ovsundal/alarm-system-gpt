@@ -11,7 +11,6 @@ from reservoir.serializers.reservoir_measurement_serializer import (
 from reservoir.services.reservoir_measurement_services import (
     filter_reservoir_data,
     add_alarm_limits_to_reservoir_data,
-    add_time_passed_hr
 )
 
 
@@ -39,11 +38,10 @@ class ReservoirMeasurementViewSet(
             return Response([])
 
         filtered_sorted_data = sorted(filtered_data,
-                                      key=lambda x: x['start_timestamp']
+                                      key=lambda x: x['start_time']
                                       )
 
         processed_data = filter_reservoir_data(filtered_sorted_data)
-        processed_data = add_time_passed_hr(processed_data)
         processed_data = add_alarm_limits_to_reservoir_data(
             processed_data, alarm_lower_limit, alarm_upper_limit)
 
