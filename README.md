@@ -1,5 +1,4 @@
-# recipe-app-api
-Recipe API project
+# Alarm System GPT
 
 ### Build the project
 `docker-compose build`
@@ -12,6 +11,9 @@ Recipe API project
 
 ### To run a migration: 
 `docker-compose run --rm app sh -c "python manage.py makemigrations"`
+
+#### If package errors on docker-compose up, try 
+`docker-compose up --build`
 
 ### View the API documentation
 http://localhost:8000/api/docs/
