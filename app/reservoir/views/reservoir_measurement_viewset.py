@@ -25,9 +25,16 @@ class ReservoirMeasurementViewSet(
 
     def retrieve(self, request, *args, **kwargs):
         well_id = kwargs.get(self.lookup_field)
-        print(request)
-        alarm_lower_limit = request.query_params.get('lowerAlarm')
-        alarm_upper_limit = request.query_params.get('upperAlarm')
+        rpi_alarm_lower_limit = request.query_params.get('rpiLowerAlarm')
+        rpi_alarm_upper_limit = request.query_params.get('rpiUpperAlarm')
+        cpi_alarm_lower_limit = request.query_params.get('cpiLowerAlarm')
+        cpi_alarm_upper_limit = request.query_params.get('cpiUpperAlarm')
+        wpi_alarm_lower_limit = request.query_params.get('wpiLowerAlarm')
+        wpi_alarm_upper_limit = request.query_params.get('wpiUpperAlarm')
+
+        alarms_list = [rpi_alarm_lower_limit, rpi_alarm_upper_limit,
+                       cpi_alarm_lower_limit, cpi_alarm_upper_limit,
+                       wpi_alarm_lower_limit, wpi_alarm_upper_limit]
 
         with open('reservoir/data/static_reservoir_data.json', 'r') as f:
             static_reservoir_data = json.load(f)
@@ -44,8 +51,8 @@ class ReservoirMeasurementViewSet(
 
         processed_data = filter_reservoir_data(filtered_sorted_data)
         processed_data = add_alarm_limits_to_reservoir_data(
-            processed_data, alarm_lower_limit, alarm_upper_limit)
+            processed_data, alarms_list)
         processed_data = round_numbers(processed_data)
-        processed_data = calculate_trend_lines(processed_data)
+        # processed_data = calculate_trend_lines(processed_data)
 
         return Response(processed_data)
