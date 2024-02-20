@@ -50,25 +50,29 @@ def calculate_trend_lines(well_data):
     # Apply the trend lines to the data points
     for data in well_data:
         time = data['start_time']
-        data['wpi_trend'] = wpi_slope * time + wpi_intercept
-        data['rpi_trend'] = rpi_slope * time + rpi_intercept
-        data['cpi_trend'] = cpi_slope * time + cpi_intercept
+        data['wpi_trend'] = round(wpi_slope * time + wpi_intercept, 2)
+        data['rpi_trend'] = round(rpi_slope * time + rpi_intercept, 2)
+        data['cpi_trend'] = round(cpi_slope * time + cpi_intercept, 2)
 
     # Extend the trend lines to the future
     future_time = 100000
     for _ in range(10):
         future_time += 10000
-        future_wpi = wpi_slope * future_time + wpi_intercept
-        future_rpi = rpi_slope * future_time + rpi_intercept
-        future_cpi = cpi_slope * future_time + cpi_intercept
+        future_wpi = wpi_slope * future_time + wpi_intercept,
+        future_rpi = rpi_slope * future_time + rpi_intercept,
+        future_cpi = cpi_slope * future_time + cpi_intercept,
 
         well_data.append({
             'start_time': future_time,
             'wpi_trend': future_wpi,
             'rpi_trend': future_rpi,
             'cpi_trend': future_cpi,
-            'alarm_lower_limit': well_data[0]['alarm_lower_limit'],
-            'alarm_upper_limit': well_data[0]['alarm_upper_limit']
+            'rpi_alarm_lower_limit': well_data[0]['rpi_alarm_lower_limit'],
+            'rpi_alarm_upper_limit': well_data[0]['rpi_alarm_upper_limit'],
+            'cpi_alarm_lower_limit': well_data[0]['cpi_alarm_lower_limit'],
+            'cpi_alarm_upper_limit': well_data[0]['cpi_alarm_upper_limit'],
+            'wpi_alarm_lower_limit': well_data[0]['wpi_alarm_lower_limit'],
+            'wpi_alarm_upper_limit': well_data[0]['wpi_alarm_upper_limit'],
         })
 
     return well_data

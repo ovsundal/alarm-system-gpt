@@ -53,6 +53,6 @@ class ReservoirMeasurementViewSet(
         processed_data = add_alarm_limits_to_reservoir_data(
             processed_data, alarms_list)
         processed_data = round_numbers(processed_data)
-        # processed_data = calculate_trend_lines(processed_data)
+        processed_data = calculate_trend_lines(processed_data)
 
         return Response(processed_data)
