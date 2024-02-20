@@ -58,9 +58,9 @@ def calculate_trend_lines(well_data):
     future_time = 100000
     for _ in range(10):
         future_time += 10000
-        future_wpi = wpi_slope * future_time + wpi_intercept,
-        future_rpi = rpi_slope * future_time + rpi_intercept,
-        future_cpi = cpi_slope * future_time + cpi_intercept,
+        future_wpi = round(wpi_slope * future_time + wpi_intercept, 2)
+        future_rpi = round(rpi_slope * future_time + rpi_intercept, 2)
+        future_cpi = round(cpi_slope * future_time + cpi_intercept, 2)
 
         well_data.append({
             'start_time': future_time,
