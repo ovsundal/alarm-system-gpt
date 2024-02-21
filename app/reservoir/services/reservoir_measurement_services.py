@@ -36,44 +36,41 @@ def round_numbers(well_data):
 
 
 def calculate_trend_lines(well_data):
-    # Extract the wpi, rpi, and cpi values along with their corresponding time values
-    times = [data['start_time'] for data in well_data]
-    wpi_values = [data['wpi'] for data in well_data]
-    rpi_values = [data['rpi'] for data in well_data]
-    cpi_values = [data['cpi'] for data in well_data]
 
-    # Calculate the best fit lines
-    wpi_slope, wpi_intercept = np.polyfit(times, wpi_values, 1)
-    rpi_slope, rpi_intercept = np.polyfit(times, rpi_values, 1)
-    cpi_slope, cpi_intercept = np.polyfit(times, cpi_values, 1)
+    # Split the well_data
+    trend1_data = well_data[0:4]
+    trend2_data = well_data[3:12]
+    trend3_data = well_data[11:17]
+    trend4_data = well_data[16:23]
 
-    # Apply the trend lines to the data points
-    for data in well_data:
-        time = data['start_time']
-        data['wpi_trend'] = round(wpi_slope * time + wpi_intercept, 2)
-        data['rpi_trend'] = round(rpi_slope * time + rpi_intercept, 2)
-        data['cpi_trend'] = round(cpi_slope * time + cpi_intercept, 2)
+    trend1_data = calculate_and_add_slope_intercept_and_r_squared(trend1_data, 1)
+    trend2_data = calculate_and_add_slope_intercept_and_r_squared(trend2_data, 2)
+    trend3_data = calculate_and_add_slope_intercept_and_r_squared(trend3_data, 3)
+    trend4_data = calculate_and_add_slope_intercept_and_r_squared(trend4_data, 4)
 
-    # Extend the trend lines to the future
-    future_time = 100000
-    for _ in range(10):
-        future_time += 10000
-        future_wpi = round(wpi_slope * future_time + wpi_intercept, 2)
-        future_rpi = round(rpi_slope * future_time + rpi_intercept, 2)
-        future_cpi = round(cpi_slope * future_time + cpi_intercept, 2)
+    return trend1_data[:-1] + trend2_data[:-1] + trend3_data[:-1] + trend4_data
 
-        well_data.append({
-            'start_time': future_time,
-            'wpi_trend': future_wpi,
-            'rpi_trend': future_rpi,
-            'cpi_trend': future_cpi,
-            'rpi_alarm_lower_limit': well_data[0]['rpi_alarm_lower_limit'],
-            'rpi_alarm_upper_limit': well_data[0]['rpi_alarm_upper_limit'],
-            'cpi_alarm_lower_limit': well_data[0]['cpi_alarm_lower_limit'],
-            'cpi_alarm_upper_limit': well_data[0]['cpi_alarm_upper_limit'],
-            'wpi_alarm_lower_limit': well_data[0]['wpi_alarm_lower_limit'],
-            'wpi_alarm_upper_limit': well_data[0]['wpi_alarm_upper_limit'],
-        })
 
-    return well_data
+def calculate_and_add_slope_intercept_and_r_squared(trend_line_data, trend_number):
+    # Extract the start_time, wpi, and rpi values for trend_line_data
+    times = [data['start_time'] for data in trend_line_data]
+    wpi_values = [data['wpi'] for data in trend_line_data]
+    rpi_values = [data['rpi'] for data in trend_line_data]
 
+    # Calculate the wpi and rpi slopes, intercepts, and R^2
+    (wpi_slope, wpi_intercept), residuals, _, _, _ = np.polyfit(times, wpi_values, 1, full=True)
+    wpi_r_squared = 1 - residuals / (len(wpi_values) * np.var(wpi_values))
+
+    (rpi_slope, rpi_intercept), residuals, _, _, _ = np.polyfit(times, rpi_values, 1, full=True)
+    rpi_r_squared = 1 - residuals / (len(rpi_values) * np.var(rpi_values))
+
+    # Add the slopes, intercepts, and R^2 to each dictionary in the trend_line_data list
+    for data in trend_line_data:
+        data[f'wpi_slope_{trend_number}'] = wpi_slope
+        data[f'wpi_intercept_{trend_number}'] = wpi_intercept
+        data[f'wpi_r_squared_{trend_number}'] = np.round(wpi_r_squared, 3)
+        data[f'rpi_slope_{trend_number}'] = rpi_slope
+        data[f'rpi_intercept_{trend_number}'] = rpi_intercept
+        data[f'rpi_r_squared_{trend_number}'] = np.round(rpi_r_squared, 3)
+
+    return trend_line_data
