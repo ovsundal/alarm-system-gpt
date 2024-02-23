@@ -11,7 +11,7 @@ from reservoir.serializers.reservoir_measurement_serializer import (
 from reservoir.services.reservoir_measurement_services import (
     filter_reservoir_data,
     add_alarm_limits_to_reservoir_data,
-    round_numbers, calculate_trend_lines
+    round_numbers, calculate_trend_lines, extend_timelines
 )
 
 
@@ -54,5 +54,6 @@ class ReservoirMeasurementViewSet(
             processed_data, alarms_list)
         processed_data = round_numbers(processed_data)
         processed_data = calculate_trend_lines(processed_data)
+        processed_data = extend_timelines(processed_data)
 
         return Response(processed_data)

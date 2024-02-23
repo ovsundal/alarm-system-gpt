@@ -81,3 +81,23 @@ def calculate_and_add_slope_intercept_and_r_squared(trend_line_data, trend_numbe
         data[f'cpi_r_squared_{trend_number}'] = np.round(cpi_r_squared, 3)
 
     return trend_line_data
+
+
+def extend_timelines(well_data):
+    # Extend the trend lines 10000 hours (~1 year) to the future
+    future_time = well_data[-1]['start_time'] + 10000
+
+    well_data.append({
+        'start_time': future_time,
+        'wpi_slope_4': well_data[-1]['wpi_slope_4'],
+        'wpi_intercept_4': well_data[-1]['wpi_intercept_4'],
+        'wpi_r_squared_4': well_data[-1]['wpi_r_squared_4'],
+        'rpi_slope_4': well_data[-1]['rpi_slope_4'],
+        'rpi_intercept_4': well_data[-1]['rpi_intercept_4'],
+        'rpi_r_squared_4': well_data[-1]['rpi_r_squared_4'],
+        'cpi_slope_4': well_data[-1]['cpi_slope_4'],
+        'cpi_intercept_4': well_data[-1]['cpi_intercept_4'],
+        'cpi_r_squared_4': well_data[-1]['cpi_r_squared_4'],
+    })
+
+    return well_data
