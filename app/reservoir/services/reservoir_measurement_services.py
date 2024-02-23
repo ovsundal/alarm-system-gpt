@@ -56,6 +56,7 @@ def calculate_and_add_slope_intercept_and_r_squared(trend_line_data, trend_numbe
     times = [data['start_time'] for data in trend_line_data]
     wpi_values = [data['wpi'] for data in trend_line_data]
     rpi_values = [data['rpi'] for data in trend_line_data]
+    cpi_values = [data['cpi'] for data in trend_line_data]
 
     # Calculate the wpi and rpi slopes, intercepts, and R^2
     (wpi_slope, wpi_intercept), residuals, _, _, _ = np.polyfit(times, wpi_values, 1, full=True)
@@ -63,6 +64,9 @@ def calculate_and_add_slope_intercept_and_r_squared(trend_line_data, trend_numbe
 
     (rpi_slope, rpi_intercept), residuals, _, _, _ = np.polyfit(times, rpi_values, 1, full=True)
     rpi_r_squared = 1 - residuals / (len(rpi_values) * np.var(rpi_values))
+
+    (cpi_slope, cpi_intercept), residuals, _, _, _ = np.polyfit(times, cpi_values, 1, full=True)
+    cpi_r_squared = 1 - residuals / (len(cpi_values) * np.var(cpi_values))
 
     # Add the slopes, intercepts, and R^2 to each dictionary in the trend_line_data list
     for data in trend_line_data:
@@ -72,5 +76,8 @@ def calculate_and_add_slope_intercept_and_r_squared(trend_line_data, trend_numbe
         data[f'rpi_slope_{trend_number}'] = rpi_slope
         data[f'rpi_intercept_{trend_number}'] = rpi_intercept
         data[f'rpi_r_squared_{trend_number}'] = np.round(rpi_r_squared, 3)
+        data[f'cpi_slope_{trend_number}'] = cpi_slope
+        data[f'cpi_intercept_{trend_number}'] = cpi_intercept
+        data[f'cpi_r_squared_{trend_number}'] = np.round(cpi_r_squared, 3)
 
     return trend_line_data
