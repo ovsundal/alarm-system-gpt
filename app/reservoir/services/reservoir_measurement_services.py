@@ -69,7 +69,6 @@ def calculate_and_add_slope_intercept_and_r_squared(trend_line_data, trend_numbe
 
     (cpi_slope, cpi_intercept), residuals, _, _, _ = np.polyfit(times, cpi_values, 1, full=True)
     cpi_r_squared = 1 - residuals / (len(cpi_values) * np.var(cpi_values))
-
     # Calculate the temperature and pressure slopes, intercepts, and R^2
     (temperature_slope, temperature_intercept), residuals, _, _, _ = np.polyfit(temperature_values, rpi_values, 1, full=True)
     temperature_r_squared = 1 - residuals / (len(rpi_values) * np.var(rpi_values))
@@ -79,6 +78,11 @@ def calculate_and_add_slope_intercept_and_r_squared(trend_line_data, trend_numbe
 
     # Add the slopes, intercepts, and R^2 to each dictionary in the trend_line_data list
     for data in trend_line_data:
+
+        # calculate temperature and pressure based on the slope and intercept
+        data[f'temperature_predicted_rpi_{trend_number}'] = round(temperature_slope * data['temperature'] + temperature_intercept, 3)
+        data[f'pressure_predicted_rpi_{trend_number}'] = round(pressure_slope * data['pressure'] + pressure_intercept, 3)
+
         data[f'cpi_slope_{trend_number}'] = cpi_slope
         data[f'cpi_intercept_{trend_number}'] = cpi_intercept
         data[f'cpi_r_squared_{trend_number}'] = np.round(cpi_r_squared, 3)
@@ -88,12 +92,8 @@ def calculate_and_add_slope_intercept_and_r_squared(trend_line_data, trend_numbe
         data[f'wpi_slope_{trend_number}'] = wpi_slope
         data[f'wpi_intercept_{trend_number}'] = wpi_intercept
         data[f'wpi_r_squared_{trend_number}'] = np.round(wpi_r_squared, 3)
-        data[f'temperature_slope_{trend_number}'] = temperature_slope
-        data[f'temperature_intercept_{trend_number}'] = temperature_intercept
-        data[f'temperature_r_squared_{trend_number}'] = np.round(temperature_r_squared, 3)
-        data[f'pressure_slope_{trend_number}'] = pressure_slope
-        data[f'pressure_intercept_{trend_number}'] = pressure_intercept
-        data[f'pressure_r_squared_{trend_number}'] = np.round(pressure_r_squared, 3)
+        data[f'temperature_predicted_r_squared'] = np.round(temperature_r_squared, 3)
+        data[f'pressure_predicted_r_squared'] = np.round(pressure_r_squared, 3)
 
     return trend_line_data
 
