@@ -82,6 +82,8 @@ def calculate_and_add_slope_intercept_and_r_squared(trend_line_data, trend_numbe
         # calculate temperature and pressure based on the slope and intercept
         data[f'temperature_predicted_rpi_{trend_number}'] = round(temperature_slope * data['temperature'] + temperature_intercept, 3)
         data[f'pressure_predicted_rpi_{trend_number}'] = round(pressure_slope * data['pressure'] + pressure_intercept, 3)
+        data[f'temperature_predicted_r_squared_{trend_number}'] = np.round(temperature_r_squared, 3)
+        data[f'pressure_predicted_r_squared_{trend_number}'] = np.round(pressure_r_squared, 3)
 
         data[f'cpi_slope_{trend_number}'] = cpi_slope
         data[f'cpi_intercept_{trend_number}'] = cpi_intercept
@@ -92,8 +94,7 @@ def calculate_and_add_slope_intercept_and_r_squared(trend_line_data, trend_numbe
         data[f'wpi_slope_{trend_number}'] = wpi_slope
         data[f'wpi_intercept_{trend_number}'] = wpi_intercept
         data[f'wpi_r_squared_{trend_number}'] = np.round(wpi_r_squared, 3)
-        data[f'temperature_predicted_r_squared'] = np.round(temperature_r_squared, 3)
-        data[f'pressure_predicted_r_squared'] = np.round(pressure_r_squared, 3)
+
 
     return trend_line_data
 
