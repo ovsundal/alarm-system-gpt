@@ -5,7 +5,7 @@ from langchain.prompts import ChatPromptTemplate
 
 # To control the randomness and creativity of the generated
 # text by an LLM, use temperature = 0.0
-chat = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.0)
+chat = ChatOpenAI(model="gpt-4-0125-preview", temperature=0.0)
 memory = ConversationBufferMemory()
 conversation = ConversationChain(
     llm=chat,
