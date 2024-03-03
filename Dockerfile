@@ -11,6 +11,8 @@ WORKDIR /app
 EXPOSE 8000
 
 ARG DEV=false
+ENV OPENAI_API_KEY=$OPENAI_API_KEY
+
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     apk add --update --no-cache postgresql-client jpeg-dev && \
