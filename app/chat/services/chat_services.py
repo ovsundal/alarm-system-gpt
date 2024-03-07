@@ -1,47 +1,32 @@
+import json
+
 from langchain_community.chat_models import ChatOpenAI
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 from langchain.prompts import ChatPromptTemplate
 
+from chat.services.chains.parse_user_prompt import parse_user_prompt
+
 # To control the randomness and creativity of the generated
 # text by an LLM, use temperature = 0.0
 chat = ChatOpenAI(model="gpt-4-0125-preview", temperature=0.0)
 
-# conversation = ConversationChain(
-#     llm=chat,
-#     memory=memory,
-#     verbose=True
-# )
-
-template_string = """Translate the text \
-that is delimited by triple backticks \
-into a style that is {style}. \
-text: ```{text}```
-"""
-
-prompt_template = ChatPromptTemplate.from_template(template_string)
-
-user_style = """American English \
-in a calm and respectful tone
-"""
-
-
-def ask_openai(prompt):
-    chat = ChatOpenAI(model="gpt-4-0125-preview", temperature=0.0)
+def ask_openai(user_prompt):
+    llm_model = ChatOpenAI(model="gpt-4-0125-preview", temperature=0.0)
     memory = ConversationBufferMemory()
 
     conversation = ConversationChain(
-        llm=chat,
+        llm=llm_model,
         memory=memory,
         verbose=True
     )
-    user_message = prompt_template.format_messages(
-        style=user_style,
-        text=prompt)
 
+    parsed_user_prompt = parse_user_prompt(user_prompt)
 
-    parsed_prompt = chat(user_message)
-    chat_response = conversation.predict(input=parsed_prompt.content)
+    with open('chat/services/chains/data_to_llm.json', 'r') as f:
+        static_well_data = json.load(f)
+
+    chat_response = conversation.predict(input=parsed_user_prompt)
 
     return chat_response
 
