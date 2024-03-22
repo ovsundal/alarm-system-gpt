@@ -22,6 +22,11 @@ services:
         - DB_PASS=changeme
         - OPENAI_API_KEY=${OPENAI_API_KEY}
         - DEBUG=1
+        - PORTKEY_API_KEY=${PORTKEY_API_KEY}
+        - LANGCHAIN_ENDPOINT=https://api.smith.langchain.com
+        - LANGCHAIN_API_KEY=${LANGCHAIN_API_KEY}
+        - LANGCHAIN_TRACING_V2=true
+        - LANGCHAIN_PROJECT=alarm-chatbot
     depends_on:
       - db
 

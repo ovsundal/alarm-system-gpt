@@ -1,12 +1,14 @@
 import json
+import urllib
 
 from chat.services.agent.get_agent_executor import get_agent_executor
 
 
 def ask_openai(user_prompt):
+    parsed_user_prompt = urllib.parse.unquote(user_prompt)
 
     agent = get_agent_executor()
-    response = agent.invoke({"input": user_prompt})
+    response = agent.invoke({"input": parsed_user_prompt})
     response['output'] = json.loads(response['output'])
 
     return response
