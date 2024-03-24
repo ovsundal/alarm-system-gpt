@@ -5,7 +5,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains.openai_functions import create_structured_output_runnable
 
 
-class HistoryQueryStructuredOutputFormat(BaseModel):
+class ExtractParametersForPlottingStructuredOutputFormat(BaseModel):
     well_name: str = Field(..., description="The name of the well.")
     x_axis_dimension: str = Field(default="start_time", description="X-axis dimension, possible values are start_time, pressure and temperature. \
                                   start_time is default if not specified")
@@ -25,10 +25,14 @@ class HistoryQueryStructuredOutputFormat(BaseModel):
         }
 
 
-class AnswerHistoryQuestionsTool(BaseTool):
-    name = "AnswerHistoryQuestions"
-    description = """Answer questions about history. Always run this tool if the user query is classified as a history description.
-    Parse the user query and retrieve the necessary parameters. Then use those to get well data and return it to the user.
+class ExtractParametersForPlottingTool(BaseTool):
+    name = "ExtractParametersForPlottingTool"
+    description = """Extracts parameters from the user query. These parameters should be returned to the user,
+     and will be used to extract well data outside of the LLM universe. Always run this tool if the user query is 
+     classified as a plotting query.
+
+    The well_name is 100% necessary for this request to work. If you could not find the well_name from the query, 
+    tell the user the well name could not be found, and politely ask them to include it in the query.
     """
 
     def _run(self, user_query):
@@ -38,5 +42,5 @@ class AnswerHistoryQuestionsTool(BaseTool):
             ("human", "{user_query}")
         ])
 
-        runnable = create_structured_output_runnable(HistoryQueryStructuredOutputFormat, llm, prompt_template)
+        runnable = create_structured_output_runnable(ExtractParametersForPlottingStructuredOutputFormat, llm, prompt_template)
         return runnable.invoke({"user_query": user_query}).dict()

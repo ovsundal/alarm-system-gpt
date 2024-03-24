@@ -13,16 +13,16 @@ class ClassifyUserQueryTool(BaseTool):
     This should always be the first tool run in the chain. 
     The input takes the form of a user question. Based on the question, 
     try to classify the question into one of five different categories.
-    The categories are: History description, Abnormal behavior detection, 
-    trend analysis, abonormal prevention, and background knowledge. These are the only 
+    The categories are: Graph plotting, Abnormal behavior detection, 
+    trend analysis, abnormal prevention, and background knowledge. These are the only 
     categories you should consider.
 
-        -History description. 
-        If this category is chosen, run the AnswerHistoryQuestionsTool.
+        -Graph plotting. 
+        If this category is chosen, run the ExtractParametersForPlottingTool.
             Example questions that this tool covers: 
-                -How does well A perform over the years?
                 -Can you plot the performance indicators (PI) over time (or temperature/pressure)?
-                -Plot wpi over time for well_a
+                -Plot wpi over time for well_x
+                -Plot data for well_x
 
         -Abnormal behavior detection.
             If this category is chosen, the next tool in the chain should be questions_about_abnormal_behavior.
