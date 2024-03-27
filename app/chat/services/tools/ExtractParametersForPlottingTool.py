@@ -9,10 +9,12 @@ class ExtractParametersForPlottingStructuredOutputFormat(BaseModel):
     well_name: str = Field(..., description="The name of the well.")
     x_axis_dimension: str = Field(default="start_time", description="X-axis dimension, possible values are start_time, pressure and temperature. \
                                   start_time is default if not specified")
-    y_axis_dimensions: list[str] = Field(default=["wpi", "rpi", "cpi"], description="Y-axis dimensions, possible values are wpi, rpi and cpi, \
+    y_axis_dimensions: list[str] = Field(default=["wpi", "rpi", "cpi"], description="Y-axis dimensions, possible values "
+                                        "are wpi (well), rpi (reservoir) and cpi (connection) productivity index, \
                                          any combination of those three are valid. If the user does not specify what kind of data, then set all three")
     graph_description: str = Field(default="A graph showing the performance of the well over time.",
-                                   description="A description of the graph that will be generated.")
+                                   description="A description of the graph that will be generated. Mention what "
+                                               "parameters the graph is showing, on both x and y axis. ")
 
     class Config:
         schema_extra = {
@@ -32,7 +34,7 @@ class ExtractParametersForPlottingTool(BaseTool):
      classified as a plotting query.
 
     The well_name is 100% necessary for this request to work. If you could not find the well_name from the query, 
-    tell the user the well name could not be found, and politely ask them to include it in the query.
+    tell the user the well name could not be found, and ask them to include the well name in the query.
     """
 
     def _run(self, user_query):
