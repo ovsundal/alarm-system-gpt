@@ -1,14 +1,14 @@
 [
   {
     "id": 1,
-    "name": "well1"
+    "name": "well_1"
   },
   {
     "id": 2,
-    "name": "well2"
+    "name": "well_2"
   },
   {
     "id": 3,
-    "name": "well3"
+    "name": "well_3"
   }
 ]
