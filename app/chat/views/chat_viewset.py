@@ -6,7 +6,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from chat.models.chat_model import Chat
 from chat.serializers.chat_serializer import ChatSerializer
-from chat.services.services.chat_services import ask_openai, extract_data_from_llm_response
+from chat.services.services.chat_services import ask_openai, extract_data_from_llm_response, set_alarm_limits
 
 
 class ChatViewSet(GenericViewSet, CreateModelMixin):
@@ -26,8 +26,6 @@ class ChatViewSet(GenericViewSet, CreateModelMixin):
         llm_response['output']['data_to_plot'] = (
             extract_data_from_llm_response(llm_response['output']['extract_data_params']))
 
-        llm_response['output']['alarm_limits'] = {"rpi_alarms": rpi_alarms,
-                                                  "cpi_alarms": cpi_alarms,
-                                                  "wpi_alarms": wpi_alarms}
+        llm_response['output']['alarm_limits'] = set_alarm_limits(rpi_alarms, cpi_alarms, wpi_alarms)
 
         return Response(llm_response)

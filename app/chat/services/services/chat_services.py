@@ -36,3 +36,6 @@ def extract_data_from_llm_response(data_params):
                      for item in well_data]
 
     return filtered_data
+
+def set_alarm_limits(rpi_alarms, cpi_alarms, wpi_alarms):
+    return {"rpi_alarms": rpi_alarms, "cpi_alarms": cpi_alarms, "wpi_alarms": wpi_alarms}
