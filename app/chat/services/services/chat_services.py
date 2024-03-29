@@ -37,5 +37,29 @@ def extract_data_from_llm_response(data_params):
 
     return filtered_data
 
+
 def set_alarm_limits(rpi_alarms, cpi_alarms, wpi_alarms):
-    return {"rpi_alarms": rpi_alarms, "cpi_alarms": cpi_alarms, "wpi_alarms": wpi_alarms}
+    return {"rpi": rpi_alarms, "cpi": cpi_alarms, "wpi": wpi_alarms}
+
+
+def get_outside_alarm_limits(data_to_plot, alarm_limits):
+    datapoints_outside_limits = []
+
+    for datapoint in data_to_plot:
+        for alarm_type, alarm_value in alarm_limits.items():
+            lower_limit, upper_limit = alarm_value
+            if datapoint[alarm_type] < lower_limit or datapoint[alarm_type] > upper_limit:
+                datapoint_outside_limit = {
+                    'alarm': alarm_type,
+                    'status': 'below lower limit' if datapoint[alarm_type] < lower_limit
+                    else 'above upper limit'
+                }
+                if 'start_time' in datapoint:
+                    datapoint_outside_limit['start_time'] = round(datapoint['start_time'])
+                if 'pressure' in datapoint:
+                    datapoint_outside_limit['pressure'] = round(datapoint['pressure'])
+                if 'temperature' in datapoint:
+                    datapoint_outside_limit['temperature'] = round(datapoint['temperature'])
+                datapoints_outside_limits.append(datapoint_outside_limit)
+
+    return datapoints_outside_limits
