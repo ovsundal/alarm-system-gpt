@@ -6,6 +6,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from chat.models.chat_model import Chat
 from chat.serializers.chat_serializer import ChatSerializer
+from chat.services.chains.SummarizeAlarmsOutsideRangeChain import SummarizeAlarmsOutsideRangeChain
 from chat.services.services.chat_services import ask_openai, extract_data_from_llm_response, set_alarm_limits, \
     get_outside_alarm_limits
 
@@ -31,6 +32,8 @@ class ChatViewSet(GenericViewSet, CreateModelMixin):
 
         datapoints_outside_limits = get_outside_alarm_limits(llm_response['output']['data_to_plot'],
                                                              llm_response['output']['alarm_limits'])
-        print(datapoints_outside_limits)
+
+        alarm_response = SummarizeAlarmsOutsideRangeChain().run(datapoints_outside_limits)
+        llm_response['output']['alarm_response'] = alarm_response.content
 
         return Response(llm_response)

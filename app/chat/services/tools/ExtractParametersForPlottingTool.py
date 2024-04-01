@@ -1,3 +1,4 @@
+from langchain.chains import LLMChain
 from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain.tools import BaseTool
 from langchain_community.chat_models import ChatOpenAI

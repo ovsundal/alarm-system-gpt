@@ -5,6 +5,8 @@ from chat.services.agent.get_agent_executor import get_agent_executor
 
 
 def ask_openai(user_prompt):
+    if isinstance(user_prompt, list):
+        user_prompt = json.dumps(user_prompt)
     parsed_user_prompt = urllib.parse.unquote(user_prompt)
 
     agent = get_agent_executor()
