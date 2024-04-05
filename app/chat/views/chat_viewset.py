@@ -23,8 +23,9 @@ class ChatViewSet(GenericViewSet, CreateModelMixin):
         encoded_user_prompt = urllib.parse.quote(user_prompt)
 
         llm_response = ask_openai(encoded_user_prompt)
+        print(llm_response)
 
-        if 'output' in llm_response and 'data_to_plot' in llm_response['output']:
+        if llm_response['output']['extract_data_params'] is not None:
             self.invoke_plot_data_response(llm_response, rpi_alarms, cpi_alarms, wpi_alarms)
 
         return Response(llm_response)
