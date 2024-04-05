@@ -23,9 +23,8 @@ class ChatViewSet(GenericViewSet, CreateModelMixin):
         encoded_user_prompt = urllib.parse.quote(user_prompt)
 
         llm_response = ask_openai(encoded_user_prompt)
-        print(llm_response)
 
-        if llm_response['output']['extract_data_params'] is not None:
+        if llm_response['plotting'] is not None:
             self.invoke_plot_data_response(llm_response, rpi_alarms, cpi_alarms, wpi_alarms)
 
         return Response(llm_response)
@@ -35,15 +34,15 @@ class ChatViewSet(GenericViewSet, CreateModelMixin):
                                   cpi_alarms,
                                   wpi_alarms):
         # retrieve data based on extracted data parameters from the llm
-        llm_response['output']['data_to_plot'] = (
-            extract_data_from_llm_response(llm_response['output']['extract_data_params']))
+        llm_response['plotting']['data_to_plot'] = (
+            extract_data_from_llm_response(llm_response['plotting']['extract_data_params']))
 
-        llm_response['output']['alarm_limits'] = set_alarm_limits(rpi_alarms, cpi_alarms, wpi_alarms)
+        llm_response['plotting']['alarm_limits'] = set_alarm_limits(rpi_alarms, cpi_alarms, wpi_alarms)
 
-        datapoints_outside_limits = get_outside_alarm_limits(llm_response['output']['data_to_plot'],
-                                                             llm_response['output']['alarm_limits'])
+        datapoints_outside_limits = get_outside_alarm_limits(llm_response['plotting']['data_to_plot'],
+                                                             llm_response['plotting']['alarm_limits'])
 
         alarm_response = SummarizeAlarmsOutsideRangeChain().run(datapoints_outside_limits)
-        llm_response['output']['alarm_response'] = alarm_response.content
+        llm_response['plotting']['alarm_response'] = alarm_response.content
 
         return Response(llm_response)

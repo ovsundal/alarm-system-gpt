@@ -11,9 +11,7 @@ def ask_openai(user_prompt):
 
     agent = get_agent_executor()
     response = agent.invoke({"input": parsed_user_prompt})
-    response['output'] = json.loads(response['output'])
-
-    return response
+    return json.loads(response['output'])
 
 
 def extract_data_from_llm_response(data_params):
