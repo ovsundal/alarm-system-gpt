@@ -46,11 +46,10 @@ def set_alarm_limits(rpi_alarms, cpi_alarms, wpi_alarms):
 
 def get_outside_alarm_limits(data_to_plot, alarm_limits):
     datapoints_outside_limits = []
-
     for datapoint in data_to_plot:
         for alarm_type, alarm_value in alarm_limits.items():
             lower_limit, upper_limit = alarm_value
-            if datapoint[alarm_type] < lower_limit or datapoint[alarm_type] > upper_limit:
+            if alarm_type in datapoint and (datapoint[alarm_type] < lower_limit or datapoint[alarm_type] > upper_limit):
                 datapoint_outside_limit = {
                     'alarm': alarm_type,
                     'status': 'below lower limit' if datapoint[alarm_type] < lower_limit
