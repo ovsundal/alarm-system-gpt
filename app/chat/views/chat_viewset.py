@@ -24,6 +24,15 @@ class ChatViewSet(GenericViewSet, CreateModelMixin):
 
         llm_response = ask_openai(encoded_user_prompt)
 
+        if 'output' in llm_response and 'data_to_plot' in llm_response['output']:
+            self.invoke_plot_data_response(llm_response, rpi_alarms, cpi_alarms, wpi_alarms)
+
+        return Response(llm_response)
+
+    @staticmethod
+    def invoke_plot_data_response(llm_response, rpi_alarms,
+                                  cpi_alarms,
+                                  wpi_alarms):
         # retrieve data based on extracted data parameters from the llm
         llm_response['output']['data_to_plot'] = (
             extract_data_from_llm_response(llm_response['output']['extract_data_params']))

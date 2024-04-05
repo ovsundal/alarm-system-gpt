@@ -1,9 +1,8 @@
-from langchain.chains import LLMChain
-from langchain_core.pydantic_v1 import BaseModel, Field
+from langchain.chains.openai_functions import create_structured_output_runnable
 from langchain.tools import BaseTool
 from langchain_community.chat_models import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from langchain.chains.openai_functions import create_structured_output_runnable
+from langchain_core.pydantic_v1 import BaseModel, Field
 
 
 class ExtractParametersForPlottingStructuredOutputFormat(BaseModel):
@@ -45,5 +44,6 @@ class ExtractParametersForPlottingTool(BaseTool):
             ("human", "{user_query}")
         ])
 
-        runnable = create_structured_output_runnable(ExtractParametersForPlottingStructuredOutputFormat, llm, prompt_template)
+        runnable = create_structured_output_runnable(ExtractParametersForPlottingStructuredOutputFormat, llm,
+                                                     prompt_template)
         return runnable.invoke({"user_query": user_query}).dict()
