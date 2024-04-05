@@ -9,6 +9,7 @@ class ReservoirMeasurement(models.Model):
     wpi = models.FloatField()
     rpi = models.FloatField()
     cpi = models.FloatField()
+    well_id = models.IntegerField()
 
     def __str__(self):
         return (f"Measurement from {self.start_timestamp} to "
