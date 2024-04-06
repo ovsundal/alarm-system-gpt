@@ -17,3 +17,8 @@
 
 ### View the API documentation
 http://localhost:8000/api/docs/
+
+### Chroma
+To recreate the vector database for embeddings, simply delete the app/Chroma folder. To add new data sources, add the 
+pdfs to the app/chat/services/background-knowledge folder and add them to the loader in FindInformationTool 
+_setup_and_feed_database() method.
