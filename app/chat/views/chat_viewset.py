@@ -6,7 +6,6 @@ from rest_framework.viewsets import GenericViewSet
 
 from chat.models.chat_model import Chat
 from chat.serializers.chat_serializer import ChatSerializer
-from chat.services.chains.SummarizeAlarmsOutsideRangeChain import SummarizeAlarmsOutsideRangeChain
 from chat.services.services.chat_services import ask_openai, extract_data_from_llm_response, set_alarm_limits, \
     get_outside_alarm_limits, extract_trend_info
 from reservoir.services.reservoir_measurement_services import calculate_time_vs_pi_trend_lines
@@ -41,10 +40,8 @@ class ChatViewSet(GenericViewSet, CreateModelMixin):
         llm_response['plotting']['alarm_limits'] = set_alarm_limits(rpi_alarms, cpi_alarms, wpi_alarms)
 
         # alarms
-        datapoints_outside_limits = get_outside_alarm_limits(llm_response['plotting']['data_to_plot'],
+        llm_response['plotting']['alarm_response'] = get_outside_alarm_limits(llm_response['plotting']['data_to_plot'],
                                                              llm_response['plotting']['alarm_limits'])
-        alarm_response = SummarizeAlarmsOutsideRangeChain().run(datapoints_outside_limits)
-        llm_response['plotting']['alarm_response'] = alarm_response.content
 
         # trends
         llm_response['plotting']['data_to_plot'] = calculate_time_vs_pi_trend_lines(llm_response['plotting']['data_to_plot'])

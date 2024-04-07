@@ -43,7 +43,7 @@ def set_alarm_limits(rpi_alarms, cpi_alarms, wpi_alarms):
 
 
 def get_outside_alarm_limits(data_to_plot, alarm_limits):
-    datapoints_outside_limits = []
+    alarm_info = []
     for datapoint in data_to_plot:
         for alarm_type, alarm_value in alarm_limits.items():
             lower_limit, upper_limit = alarm_value
@@ -59,9 +59,10 @@ def get_outside_alarm_limits(data_to_plot, alarm_limits):
                     datapoint_outside_limit['pressure'] = round(datapoint['pressure'])
                 if 'temperature' in datapoint:
                     datapoint_outside_limit['temperature'] = round(datapoint['temperature'])
-                datapoints_outside_limits.append(datapoint_outside_limit)
+                alarm_info.append(f"The alarm for {alarm_type} is {datapoint_outside_limit['status']} at "
+                                  f"{datapoint_outside_limit['start_time']}.")
 
-    return datapoints_outside_limits
+    return alarm_info
 
 
 def extract_trend_info(json_data):
