@@ -52,49 +52,63 @@ def calculate_time_vs_pi_trend_lines(well_data):
 
 
 def calculate_and_add_slope_intercept_and_r_squared(trend_line_data, trend_number):
-    # Extract the start_time, wpi, and rpi values for trend_line_data
+    # if start_time is not available, predictions are impossible
+    if 'start_time' not in trend_line_data[0]:
+        return trend_line_data
+
     times = [data['start_time'] for data in trend_line_data]
-    cpi_values = [data['cpi'] for data in trend_line_data]
-    rpi_values = [data['rpi'] for data in trend_line_data]
-    wpi_values = [data['wpi'] for data in trend_line_data]
-    temperature_values = [data['temperature'] for data in trend_line_data]
-    pressure_values = [data['pressure'] for data in trend_line_data]
 
-    # Calculate the PI slopes, intercepts, and R^2
-    (wpi_slope, wpi_intercept), residuals, _, _, _ = np.polyfit(times, wpi_values, 1, full=True)
-    wpi_r_squared = 1 - residuals / (len(wpi_values) * np.var(wpi_values))
+    # when used by the LLM, different kind of data may be available, so build in checks to handle data processing
+    if 'cpi' in trend_line_data[0]:
+        cpi_values = [data['cpi'] for data in trend_line_data]
+        (cpi_slope, cpi_intercept), residuals, _, _, _ = np.polyfit(times, cpi_values, 1, full=True)
+        cpi_r_squared = 1 - residuals / (len(cpi_values) * np.var(cpi_values))
 
-    (rpi_slope, rpi_intercept), residuals, _, _, _ = np.polyfit(times, rpi_values, 1, full=True)
-    rpi_r_squared = 1 - residuals / (len(rpi_values) * np.var(rpi_values))
+    if 'rpi' in trend_line_data[0]:
+        rpi_values = [data['rpi'] for data in trend_line_data]
+        (rpi_slope, rpi_intercept), residuals, _, _, _ = np.polyfit(times, rpi_values, 1, full=True)
+        rpi_r_squared = 1 - residuals / (len(rpi_values) * np.var(rpi_values))
 
-    (cpi_slope, cpi_intercept), residuals, _, _, _ = np.polyfit(times, cpi_values, 1, full=True)
-    cpi_r_squared = 1 - residuals / (len(cpi_values) * np.var(cpi_values))
-    # Calculate the temperature and pressure slopes, intercepts, and R^2
-    (temperature_slope, temperature_intercept), residuals, _, _, _ = np.polyfit(temperature_values, rpi_values, 1, full=True)
-    temperature_r_squared = 1 - residuals / (len(rpi_values) * np.var(rpi_values))
+    if 'wpi' in trend_line_data[0]:
+        wpi_values = [data['wpi'] for data in trend_line_data]
+        (wpi_slope, wpi_intercept), residuals, _, _, _ = np.polyfit(times, wpi_values, 1, full=True)
+        wpi_r_squared = 1 - residuals / (len(wpi_values) * np.var(wpi_values))
 
-    (pressure_slope, pressure_intercept), residuals, _, _, _ = np.polyfit(pressure_values, rpi_values, 1, full=True)
-    pressure_r_squared = 1 - residuals / (len(rpi_values) * np.var(rpi_values))
+    if 'temperature' in trend_line_data[0]:
+        temperature_values = [data['temperature'] for data in trend_line_data]
+        (temperature_slope, temperature_intercept), residuals, _, _, _ = np.polyfit(temperature_values, rpi_values, 1, full=True)
+        temperature_r_squared = 1 - residuals / (len(rpi_values) * np.var(rpi_values))
+
+    if 'pressure' in trend_line_data[0]:
+        pressure_values = [data['pressure'] for data in trend_line_data]
+        (pressure_slope, pressure_intercept), residuals, _, _, _ = np.polyfit(pressure_values, rpi_values, 1, full=True)
+        pressure_r_squared = 1 - residuals / (len(rpi_values) * np.var(rpi_values))
 
     # Add the slopes, intercepts, and R^2 to each dictionary in the trend_line_data list
     for data in trend_line_data:
+        if 'cpi' in trend_line_data[0]:
+            data[f'cpi_slope_{trend_number}'] = cpi_slope
+            data[f'cpi_intercept_{trend_number}'] = cpi_intercept
+            data[f'cpi_r_squared_{trend_number}'] = np.round(cpi_r_squared, 3).tolist()
 
-        # calculate temperature and pressure based on the slope and intercept
-        data[f'temperature_predicted_rpi_{trend_number}'] = round(temperature_slope * data['temperature'] + temperature_intercept, 3)
-        data[f'pressure_predicted_rpi_{trend_number}'] = round(pressure_slope * data['pressure'] + pressure_intercept, 3)
-        data[f'temperature_predicted_r_squared_{trend_number}'] = np.round(temperature_r_squared, 3)
-        data[f'pressure_predicted_r_squared_{trend_number}'] = np.round(pressure_r_squared, 3)
+        if 'rpi' in trend_line_data[0]:
+            data[f'rpi_slope_{trend_number}'] = rpi_slope
+            data[f'rpi_intercept_{trend_number}'] = rpi_intercept
+            data[f'rpi_r_squared_{trend_number}'] = np.round(rpi_r_squared, 3).tolist()
 
-        data[f'cpi_slope_{trend_number}'] = cpi_slope
-        data[f'cpi_intercept_{trend_number}'] = cpi_intercept
-        data[f'cpi_r_squared_{trend_number}'] = np.round(cpi_r_squared, 3)
-        data[f'rpi_slope_{trend_number}'] = rpi_slope
-        data[f'rpi_intercept_{trend_number}'] = rpi_intercept
-        data[f'rpi_r_squared_{trend_number}'] = np.round(rpi_r_squared, 3)
-        data[f'wpi_slope_{trend_number}'] = wpi_slope
-        data[f'wpi_intercept_{trend_number}'] = wpi_intercept
-        data[f'wpi_r_squared_{trend_number}'] = np.round(wpi_r_squared, 3)
+        if 'wpi' in trend_line_data[0]:
+            data[f'wpi_slope_{trend_number}'] = wpi_slope
+            data[f'wpi_intercept_{trend_number}'] = wpi_intercept
+            data[f'wpi_r_squared_{trend_number}'] = np.round(wpi_r_squared, 3).tolist()
 
+        if 'temperature' in trend_line_data[0]:
+            data[f'temperature_predicted_rpi_{trend_number}'] = round(
+                temperature_slope * data['temperature'] + temperature_intercept, 3)
+            data[f'temperature_predicted_r_squared_{trend_number}'] = np.round(temperature_r_squared, 3).tolist()
+
+        if 'pressure' in trend_line_data[0]:
+            data[f'pressure_predicted_rpi_{trend_number}'] = round(pressure_slope * data['pressure'] + pressure_intercept, 3)
+            data[f'pressure_predicted_r_squared_{trend_number}'] = np.round(pressure_r_squared, 3).tolist()
 
     return trend_line_data
 

@@ -62,3 +62,29 @@ def get_outside_alarm_limits(data_to_plot, alarm_limits):
                 datapoints_outside_limits.append(datapoint_outside_limit)
 
     return datapoints_outside_limits
+
+
+def extract_trend_info(json_data):
+    different_trend_datapoints = [2, 4, 13, 18]
+    trend_info = []
+
+    for trend_number, i in enumerate(different_trend_datapoints, start=1):
+        if 'cpi' in json_data[i]:
+            cpi_slope = json_data[i][f'cpi_slope_{trend_number}']
+            cpi_intercept = json_data[i][f'cpi_intercept_{trend_number}']
+            cpi_trend = 'increasing' if cpi_slope > 0 else 'decreasing'
+            trend_info.append(f"Trend {trend_number} for CPI is {cpi_trend} with equation y = {round(cpi_slope, 6)}*x + {round(cpi_intercept, 6)}.")
+
+        if 'rpi' in json_data[i]:
+            rpi_slope = json_data[i][f'rpi_slope_{trend_number}']
+            rpi_intercept = json_data[i][f'rpi_intercept_{trend_number}']
+            rpi_trend = 'increasing' if rpi_slope > 0 else 'decreasing'
+            trend_info.append(f"Trend {trend_number} for RPI is {rpi_trend} with equation y = {round(rpi_slope, 6)}*x + {round(rpi_intercept, 6)}.")
+
+        if 'wpi' in json_data[i]:
+            wpi_slope = json_data[i][f'wpi_slope_{trend_number}']
+            wpi_intercept = json_data[i][f'wpi_intercept_{trend_number}']
+            wpi_trend = 'increasing' if wpi_slope > 0 else 'decreasing'
+            trend_info.append(f"Trend {trend_number} for WPI is {wpi_trend} with equation y = {round(wpi_slope, 6)}*x + {round(wpi_intercept, 6)}.")
+
+    return trend_info
