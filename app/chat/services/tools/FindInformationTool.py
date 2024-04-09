@@ -16,7 +16,7 @@ from langchain_community.embeddings.openai import OpenAIEmbeddings
 
 class FindInformationTool(BaseTool):
     name = "FindInformationTool"
-    description = """Searches a vector database for information that answers the user query. 
+    description = """Searches a vector database for information that answers the user query. This tool is used
     Always run this tool if the user query is classified as a knowledge search.
     """
 
@@ -28,6 +28,7 @@ class FindInformationTool(BaseTool):
         number at the end of the answer.
         {context}
         Question: {question}
+        Helpful Answer:
         """
 
         if not os.path.exists('chroma/'):
