@@ -18,11 +18,10 @@ def ask_openai(user_prompt):
         print(f"Error decoding JSON: {e}")
 
 
-def extract_data_from_llm_response(data_params):
+def extract_data_from_llm_response(well_name, data_params):
     if data_params is None:
         return None
 
-    well_name = data_params.get('well_name')
     x_axis_dimension = data_params.get('x_axis_dimension')
     y_axis_dimensions = data_params.get('y_axis_dimensions')
 
@@ -97,3 +96,10 @@ def extract_trend_info(json_data):
             trend_info.append(f"Trend {trend_number} for WPI is {wpi_trend} with equation y = {round(wpi_slope, 6)}*x + {round(wpi_intercept, 6)}.")
 
     return trend_info
+
+
+def build_trend_equation(performance_indicator, phase, rpi_alarms,
+                         cpi_alarms,
+                         wpi_alarms):
+
+    pass

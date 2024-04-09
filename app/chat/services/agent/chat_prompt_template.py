@@ -18,10 +18,14 @@ def get_chat_prompt():
                         If you ran the FindInformationTool:
                             If you were able to find information, return the information to the user, if not, 
                             inform the user that the information could not be found.
-             plotting: This object should be None unless the ExtractParametersForPlottingTool was run. 
+             plotting: This object should be null unless the ExtractParametersForPlottingTool was run. 
                        If so, add the following object:
                             extract_data_params: add extracted parameters from AnswerHistoryQuestionsTool here. 
              }}
+             trends: This object should be null unless the ExtractParametersForEvaluatingTrendTool was run. 
+                       If so, add the following object:
+                            performance_indicator: add extracted parameters from ExtractParametersForEvaluatingTrendTool 
+                            here.
              It must be possible to parse this json object using a json.loads() function in Python.
              """),
             MessagesPlaceholder("chat_history", optional=True),
