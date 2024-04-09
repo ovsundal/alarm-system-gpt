@@ -37,6 +37,11 @@ class ChatViewSet(GenericViewSet, CreateModelMixin):
         llm_response['plotting']['data_to_plot'] = (
             extract_data_from_llm_response(llm_response['plotting']['extract_data_params']))
 
+        if llm_response['plotting']['data_to_plot'] is None:
+            llm_response['plotting'] = None
+            llm_response['chat_response'] = "Could not find any data for this well."
+            return Response(llm_response)
+
         llm_response['plotting']['alarm_limits'] = set_alarm_limits(rpi_alarms, cpi_alarms, wpi_alarms)
 
         # alarms

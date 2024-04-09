@@ -11,7 +11,11 @@ def ask_openai(user_prompt):
 
     agent = get_agent_executor()
     response = agent.invoke({"input": parsed_user_prompt})
-    return json.loads(response['output'])
+
+    try:
+        return json.loads(response['output'])
+    except json.decoder.JSONDecodeError as e:
+        print(f"Error decoding JSON: {e}")
 
 
 def extract_data_from_llm_response(data_params):
@@ -28,6 +32,10 @@ def extract_data_from_llm_response(data_params):
     # find correct well data
     well_data = [item for item in static_reservoir_data
                      if item['well_name'] == well_name]
+
+    # could not find any data for this well
+    if len(well_data) == 0:
+        return None
 
     # filter based on llm response parameters
     required_attributes = [well_name, x_axis_dimension] + y_axis_dimensions

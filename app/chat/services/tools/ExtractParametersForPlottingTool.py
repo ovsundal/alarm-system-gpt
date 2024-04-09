@@ -34,7 +34,10 @@ class ExtractParametersForPlottingTool(BaseTool):
      classified as a plotting query.
 
     The well_name is 100% necessary for this request to work. If you could not find the well_name from the query, 
-    tell the user the well name could not be found, and ask them to include the well name in the query.
+    tell the user the well name could not be found, and ask them to include the well name in the query. Set plotting 
+    attribute to null.
+    
+    If data_to_plot is None, that means the well could not be found. Inform the user that the well could not be found.
     """
 
     def _run(self, user_query):
