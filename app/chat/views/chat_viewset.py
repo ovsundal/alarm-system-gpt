@@ -7,7 +7,7 @@ from rest_framework.viewsets import GenericViewSet
 from chat.models.chat_model import Chat
 from chat.serializers.chat_serializer import ChatSerializer
 from chat.services.services.chat_services import ask_openai, extract_data_from_llm_response, set_alarm_limits, \
-    get_outside_alarm_limits, extract_trend_info, build_trend_equation
+    get_outside_alarm_limits, extract_trend_info, calculate_trend_response
 from reservoir.services.reservoir_measurement_services import calculate_time_vs_pi_trend_lines
 
 
@@ -27,7 +27,7 @@ class ChatViewSet(GenericViewSet, CreateModelMixin):
         if llm_response['plotting'] is not None:
             self.invoke_plot_data_response(llm_response, rpi_alarms, cpi_alarms, wpi_alarms, well_name)
         if llm_response['trends'] is not None:
-            self.invoke_trend_data_response(llm_response)
+            self.invoke_trend_data_response(llm_response, rpi_alarms, cpi_alarms, wpi_alarms, well_name)
 
         return Response(llm_response)
 
@@ -61,10 +61,12 @@ class ChatViewSet(GenericViewSet, CreateModelMixin):
     @staticmethod
     def invoke_trend_data_response(llm_response, rpi_alarms,
                                    cpi_alarms,
-                                   wpi_alarms):
+                                   wpi_alarms,
+                                   well_name):
 
-        # trend_equation = build_trend_equation(llm_response['trends']['performance_indicator'], rpi_alarms,
-        #                                       cpi_alarms,
-        #                                       wpi_alarms)
+        llm_response['chat_response'] = calculate_trend_response(llm_response['trends']['performance_indicator'],
+                                                  llm_response['trends']['trend_number'], rpi_alarms,
+                                                  cpi_alarms,
+                                                  wpi_alarms, well_name)
 
         return Response(llm_response)

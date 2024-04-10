@@ -12,7 +12,8 @@ from chat.services.tools.FindInformationTool import FindInformationTool
 @traceable
 def get_agent_executor():
     llm_model = ChatOpenAI(model="gpt-4-0125-preview", temperature=0.0)
-    tools = [ClassifyUserQueryTool(), ExtractParametersForPlottingTool(), FindInformationTool(), ExtractParametersForEvaluatingTrendTool()]
+    tools = [ClassifyUserQueryTool(), ExtractParametersForPlottingTool(), FindInformationTool(),
+             ExtractParametersForEvaluatingTrendTool()]
     agent = create_openai_functions_agent(llm_model, tools, get_chat_prompt())
 
     return AgentExecutor(

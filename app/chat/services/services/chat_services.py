@@ -1,6 +1,8 @@
 import json
 import urllib
 
+import numpy as np
+
 from chat.services.agent.get_agent_executor import get_agent_executor
 
 
@@ -98,8 +100,37 @@ def extract_trend_info(json_data):
     return trend_info
 
 
-def build_trend_equation(performance_indicator, phase, rpi_alarms,
-                         cpi_alarms,
-                         wpi_alarms):
+def calculate_trend_response(performance_indicator, trend_number, rpi_alarms, cpi_alarms, wpi_alarms, well_name):
+    # retrieve data
+    with open('reservoir/data/static_reservoir_data.json', 'r') as f:
+        static_reservoir_data = json.load(f)
 
-    pass
+    # find correct well data
+    well_data = [item for item in static_reservoir_data if item['well_name'] == well_name]
+
+    if trend_number == 1:
+        well_data = well_data[0:3]
+    elif trend_number == 2:
+        well_data = well_data[2:12]
+    elif trend_number == 3:
+        well_data = well_data[11:17]
+    elif trend_number == 4:
+        well_data = well_data[16:23]
+
+    times = [data['start_time'] for data in well_data]
+    alarms = rpi_alarms if performance_indicator == 'rpi' else cpi_alarms if performance_indicator == 'cpi' \
+        else wpi_alarms
+
+    values = [data[performance_indicator] for data in well_data]
+    (slope, intercept), residuals, _, _, _ = np.polyfit(times, values, 1, full=True)
+
+    upper_alarm_time = (alarms[1] - intercept) / slope if slope != 0 else None
+    lower_alarm_time = (alarms[0] - intercept) / slope if slope != 0 else None
+
+    response = (f"""
+    The trend line for {performance_indicator} is y = {round(slope, 6)}*time(hours) + {round(intercept, 6)} at 
+    phase {trend_number}. For lower ({alarms[0]}) and upper ({alarms[1]}) alarms it will
+    exceed the alarm threshold at time {round(lower_alarm_time)} and {round(upper_alarm_time)}.
+                """)
+
+    return response
