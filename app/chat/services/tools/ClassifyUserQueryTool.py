@@ -8,13 +8,13 @@ class ClassifyUserQueryTool(BaseTool):
 
     def _run(self, user_query):
         llm = ChatOpenAI(model="gpt-4-0125-preview", temperature=0)
-        prompt = f""" Classify the user question into one of five different categories.
-        The input takes the form of a user question. Based on the question, 
-        try to classify the question into one of two different categories.
-        The categories are: Graph plotting, knowledge search and evaluate trends.
+        prompt = f""" Based on the user query, try to classify the question into one of three different categories.
+        The categories are: Graph plotting, knowledge search and evaluate trends. If you cannot classify into 
+        any of these categories, inform the user and ask for a more specific question.
 
           ,\nQuestion: {user_query}\n
     """
         classification = llm.invoke(prompt)
 
         return classification
+
