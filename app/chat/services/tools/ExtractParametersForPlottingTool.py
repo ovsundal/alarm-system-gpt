@@ -6,14 +6,19 @@ from langchain_core.pydantic_v1 import BaseModel, Field
 
 
 class ExtractParametersForPlottingStructuredOutputFormat(BaseModel):
-    x_axis_dimension: str = Field(default="start_time", description="X-axis dimension, possible values are start_time, pressure and temperature. \
-                                  start_time is default if not specified")
-    y_axis_dimensions: list[str] = Field(default=["wpi", "rpi", "cpi"], description="Y-axis dimensions, possible values "
-                                        "are wpi (well), rpi (reservoir) and cpi (connection) productivity index, \
-                                         any combination of those three are valid. If the user does not specify what kind of data, then set all three")
+    x_axis_dimension: str = Field(default="start_time", description="""X-axis dimension, possible values are start_time, 
+                                                                    pressure and temperature. start_time is default if 
+                                                                    not specified""")
+
+    y_axis_dimensions: list[str] = Field(default=["wpi", "rpi", "cpi"],
+                                         description="""Y-axis dimensions, possible values "
+                                                     "are wpi (well), rpi (reservoir) and cpi (connection) productivity 
+                                                     index, any combination of those three are valid. If the user does 
+                                                     not specify what kind of data, then set all three""")
+
     graph_description: str = Field(default="A graph showing the performance of the well over time.",
-                                   description="A description of the graph that will be generated. Mention what "
-                                               "parameters the graph is showing, on both x and y axis. ")
+                                   description="""A description of the graph that will be generated. Mention what
+                                               parameters the graph is showing, on both x and y axis. """)
 
     class Config:
         schema_extra = {
@@ -42,3 +47,4 @@ class ExtractParametersForPlottingTool(BaseTool):
         runnable = create_structured_output_runnable(ExtractParametersForPlottingStructuredOutputFormat, llm,
                                                      prompt_template)
         return runnable.invoke({"user_query": user_query}).dict()
+

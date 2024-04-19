@@ -3,7 +3,7 @@ from langchain_core.tools import BaseTool
 
 
 class ClassifyUserQueryTool(BaseTool):
-    name = "ClassifyUserQuery"
+    name = "ClassifyUserQueryTool"
     description = "Always run this tool first. Classify the user query into one of three different categories."
 
     def _run(self, user_query):
