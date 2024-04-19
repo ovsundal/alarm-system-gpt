@@ -20,8 +20,8 @@ class ExtractParametersForEvaluatingTrendToolStructuredOutputFormat(BaseModel):
         }
 
 
-class ExtractParametersForEvaluatingTrendTool(BaseTool):
-    name = "ExtractParametersForEvaluatingTrendTool"
+class ExtractParametersMonitorAlarmTool(BaseTool):
+    name = "ExtractParametersMonitorAlarmTool"
     description = """
      Use this tool whenever the user asks about when a performance indicator (cpi, wpi or rpi) exceeds an alarm limit. 
     Run this tool whenever the user query is evaluated to be in the 'evaluate trends' category.
