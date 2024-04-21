@@ -61,35 +61,43 @@ class FindInformationTool(BaseTool):
 
     @staticmethod
     def _setup_and_feed_database():
-        # load data from pdfs
+        # Load PDF documents from specified paths to create a list of loaders for data extraction.
         loaders = [
-            PyPDFLoader("chat/services/background-knowledge/PTA_metrics_for_time_lapse_analysis_of_well_performance.pdf"),
-            PyPDFLoader("chat/services/background-knowledge/well_performance_metrics_suitable_for_automated_well_monitoring.pdf")
+            PyPDFLoader(
+                "chat/services/background-knowledge/PTA_metrics_for_time_lapse_analysis_of_well_performance.pdf"),
+            PyPDFLoader(
+                "chat/services/background-knowledge/well_performance_metrics_suitable_for_automated_well_monitoring.pdf")
         ]
 
+        # Initialize a list to store the content extracted from each PDF.
         docs = []
         for loader in loaders:
+            # Extract text content from each PDF and append to the docs list.
             docs.extend(loader.load())
 
-        # split data
+        # Configure a text splitter to divide the extracted text into manageable chunks for processing.
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1500,
-            chunk_overlap=150
+            chunk_size=1500,  # Set the maximum number of characters per chunk.
+            chunk_overlap=150  # Set the number of overlapping characters between adjacent chunks.
         )
 
+        # Apply the text splitter to divide the loaded documents into smaller text segments.
         splits = text_splitter.split_documents(docs)
 
-        # embedding
+        # Initialize an embedding tool to transform text data into numerical representations.
         embedding = OpenAIEmbeddings()
         persist_directory = './chroma/'
 
-        # create db
+        # Create a vector database using the embedded text segments for efficient information retrieval.
         vectordb = Chroma.from_documents(
             documents=splits,
             embedding=embedding,
             persist_directory=persist_directory
         )
 
+        # Persist the created vector database to the specified directory for future use.
         vectordb.persist()
 
+        # Return the configured vector database instance.
         return vectordb
+
