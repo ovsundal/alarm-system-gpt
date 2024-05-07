@@ -13,8 +13,8 @@ class ExtractParametersForPlottingStructuredOutputFormat(BaseModel):
     y_axis_dimensions: list[str] = Field(default=["wpi", "rpi", "cpi"],
                                          description="""Y-axis dimensions, possible values "
                                                      "are wpi (well), rpi (reservoir) and cpi (connection) productivity 
-                                                     index, any combination of those three are valid. If the user does 
-                                                     not specify what kind of data, then set all three""")
+                                                     indicator, any combination of those three are valid. If the user 
+                                                     does not specify what kind of data, then set all three""")
 
     graph_description: str = Field(default="A graph showing the performance of the well over time.",
                                    description="""A description of the graph that will be generated. Mention what

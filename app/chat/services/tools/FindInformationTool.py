@@ -21,6 +21,8 @@ class FindInformationTool(BaseTool):
     Example questions are:
         -What are performance indicators?
         -What is cpi?
+        -What does it mean when wpi drops?
+        -How can i prevent a drop of wpi?
     
     This tool is used
     Always run this tool if the user query is classified as a knowledge search.
@@ -66,7 +68,9 @@ class FindInformationTool(BaseTool):
             PyPDFLoader(
                 "chat/services/background-knowledge/PTA_metrics_for_time_lapse_analysis_of_well_performance.pdf"),
             PyPDFLoader(
-                "chat/services/background-knowledge/well_performance_metrics_suitable_for_automated_well_monitoring.pdf")
+                "chat/services/background-knowledge/well_performance_metrics_suitable_for_automated_well_monitoring.pdf"),
+            PyPDFLoader(
+                "chat/services/background-knowledge/A_New_Automated_Workflow_for_Well_Monitoring_Using_Permanent_Pressure_and_Rate_Measurements.pdf"),
         ]
 
         # Initialize a list to store the content extracted from each PDF.
