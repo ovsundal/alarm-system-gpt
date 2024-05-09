@@ -7,15 +7,12 @@ from langchain.chains.openai_functions import create_structured_output_runnable
 
 class ExtractParametersForEvaluatingTrendToolStructuredOutputFormat(BaseModel):
     performance_indicator: str = Field(default="cpi", description="""The performance indicator to be evaluated.
-    Possible values are cpi, rpi or wpi.""")
-    trend_number: int = Field(default=4, description="""The number of the trend line to be evaluated. 
-    Possible values are 1, 2, 3 or 4, where 4 is default if not specified.""")
+    Possible values are cpi (connection), rpi (reservoir) or wpi (well) performance indicators.""")
 
     class Config:
         schema_extra = {
             "example": {
-                "performance_indicator": "cpi",
-                "trend_number": 4
+                "performance_indicator": "cpi"
             }
         }
 
@@ -26,15 +23,14 @@ class ExtractParametersMonitorAlarmTool(BaseTool):
      Use this tool whenever the user asks about when a performance indicator (cpi, wpi or rpi) exceeds an alarm limit. 
     Run this tool whenever the user query is evaluated to be in the 'evaluate trends' category.
     Example questions are: 
-        -When will wpi exceed the alarm treshold? 
+        -When will wpi exceed the alarm threshold? 
         -When does cpi exceed alarm?
-        -When does wpi exceed alarm in phase 2?
+        -When does wpi exceed the threshold?
         
     Extracts parameters from the user query, formatted exactly as defined in 
     ExtractParametersForEvaluatingTrendToolStructuredOutputFormat. Always define the output like this:
      'trends': {
-        performance_indicator: str,
-        trend_number: int
+        performance_indicator: str
      }
      
      These parameters should be returned to the user,

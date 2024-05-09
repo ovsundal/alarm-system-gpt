@@ -65,8 +65,8 @@ class ChatViewSet(GenericViewSet, CreateModelMixin):
                                    well_name):
 
         llm_response['chat_response'] = calculate_trend_response(llm_response['trends']['performance_indicator'],
-                                                  llm_response['trends']['trend_number'], rpi_alarms,
-                                                  cpi_alarms,
-                                                  wpi_alarms, well_name)
+                                                                 rpi_alarms,
+                                                                 cpi_alarms,
+                                                                 wpi_alarms, well_name)
 
         return Response(llm_response)

@@ -75,32 +75,30 @@ def get_outside_alarm_limits(data_to_plot, alarm_limits):
 
 
 def extract_trend_info(json_data):
-    different_trend_datapoints = [2, 4, 13, 18]
     trend_info = []
 
-    for trend_number, i in enumerate(different_trend_datapoints, start=1):
-        if 'cpi' in json_data[i]:
-            cpi_slope = json_data[i][f'cpi_slope_{trend_number}']
-            cpi_intercept = json_data[i][f'cpi_intercept_{trend_number}']
-            cpi_trend = 'increasing' if cpi_slope > 0 else 'decreasing'
-            trend_info.append(f"Trend for regime {trend_number} for CPI is {cpi_trend} with equation y = {round(cpi_slope, 6)}*x + {round(cpi_intercept, 6)}.")
+    if 'cpi' in json_data[0]:
+        cpi_slope = json_data[0][f'cpi_slope_1']
+        cpi_intercept = json_data[0][f'cpi_intercept_1']
+        cpi_trend = 'increasing' if cpi_slope > 0 else 'decreasing'
+        trend_info.append(f"Trend for CPI is {cpi_trend} with equation y = {round(cpi_slope, 6)}*x + {round(cpi_intercept, 6)}.")
 
-        if 'rpi' in json_data[i]:
-            rpi_slope = json_data[i][f'rpi_slope_{trend_number}']
-            rpi_intercept = json_data[i][f'rpi_intercept_{trend_number}']
-            rpi_trend = 'increasing' if rpi_slope > 0 else 'decreasing'
-            trend_info.append(f"Trend for regime {trend_number} for RPI is {rpi_trend} with equation y = {round(rpi_slope, 6)}*x + {round(rpi_intercept, 6)}.")
+    if 'rpi' in json_data[0]:
+        rpi_slope = json_data[0][f'rpi_slope_1']
+        rpi_intercept = json_data[0][f'rpi_intercept_1']
+        rpi_trend = 'increasing' if rpi_slope > 0 else 'decreasing'
+        trend_info.append(f"Trend for RPI is {rpi_trend} with equation y = {round(rpi_slope, 6)}*x + {round(rpi_intercept, 6)}.")
 
-        if 'wpi' in json_data[i]:
-            wpi_slope = json_data[i][f'wpi_slope_{trend_number}']
-            wpi_intercept = json_data[i][f'wpi_intercept_{trend_number}']
-            wpi_trend = 'increasing' if wpi_slope > 0 else 'decreasing'
-            trend_info.append(f"Trend for regime {trend_number} for WPI is {wpi_trend} with equation y = {round(wpi_slope, 6)}*x + {round(wpi_intercept, 6)}.")
+    if 'wpi' in json_data[0]:
+        wpi_slope = json_data[0][f'wpi_slope_1']
+        wpi_intercept = json_data[0][f'wpi_intercept_1']
+        wpi_trend = 'increasing' if wpi_slope > 0 else 'decreasing'
+        trend_info.append(f"Trend for WPI is {wpi_trend} with equation y = {round(wpi_slope, 6)}*x + {round(wpi_intercept, 6)}.")
 
     return trend_info
 
 
-def calculate_trend_response(performance_indicator, trend_number, rpi_alarms, cpi_alarms, wpi_alarms, well_name):
+def calculate_trend_response(performance_indicator, rpi_alarms, cpi_alarms, wpi_alarms, well_name):
     # retrieve data
     with open('reservoir/data/static_reservoir_data.json', 'r') as f:
         static_reservoir_data = json.load(f)
@@ -108,14 +106,14 @@ def calculate_trend_response(performance_indicator, trend_number, rpi_alarms, cp
     # find correct well data
     well_data = [item for item in static_reservoir_data if item['well_name'] == well_name]
 
-    if trend_number == 1:
-        well_data = well_data[0:3]
-    elif trend_number == 2:
-        well_data = well_data[2:12]
-    elif trend_number == 3:
-        well_data = well_data[11:17]
-    elif trend_number == 4:
-        well_data = well_data[16:23]
+    # if trend_number == 1:
+    #     well_data = well_data[0:3]
+    # elif trend_number == 2:
+    #     well_data = well_data[2:12]
+    # elif trend_number == 3:
+    #     well_data = well_data[11:17]
+    # elif trend_number == 4:
+    #     well_data = well_data[16:23]
 
     times = [data['start_time'] for data in well_data]
     alarms = rpi_alarms if performance_indicator == 'rpi' else cpi_alarms if performance_indicator == 'cpi' \
@@ -128,8 +126,8 @@ def calculate_trend_response(performance_indicator, trend_number, rpi_alarms, cp
     lower_alarm_time = (alarms[0] - intercept) / slope if slope != 0 else None
 
     response = (f"""
-    The trend line for {performance_indicator} is y = {round(slope, 6)}*time(hours) + {round(intercept, 6)} at 
-    phase {trend_number}. For lower ({alarms[0]}) and upper ({alarms[1]}) alarms it will
+    The trend line for {performance_indicator} is y = {round(slope, 6)}*time(hours) + {round(intercept, 6)}. 
+    For lower ({alarms[0]}) and upper ({alarms[1]}) alarms it will
     exceed the alarm threshold at time {round(lower_alarm_time)} and {round(upper_alarm_time)}.
                 """)
 
