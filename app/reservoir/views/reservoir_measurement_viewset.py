@@ -55,7 +55,7 @@ class ReservoirMeasurementViewSet(
         processed_data = round_numbers(processed_data)
         processed_data = calculate_time_vs_pi_trend_lines(processed_data)
 
-        future_years_to_extend = 5
+        future_years_to_extend = 1
         for i in range(future_years_to_extend):
             processed_data = extend_timelines(processed_data)
 

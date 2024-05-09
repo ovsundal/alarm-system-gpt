@@ -27,7 +27,6 @@ def round_numbers(well_data):
     for data in well_data:
         data['start_time'] = round(data['start_time'])
         data['pressure'] = round(data['pressure'], 2)
-        data['temperature'] = round(data['temperature'], 2)
         data['wpi'] = round(data['wpi'], 2)
         data['rpi'] = round(data['rpi'], 2)
         data['cpi'] = round(data['cpi'], 2)
@@ -36,19 +35,10 @@ def round_numbers(well_data):
 
 
 def calculate_time_vs_pi_trend_lines(well_data):
-
-    # Split the well_data
-    trend1_data = well_data[0:3]
-    trend2_data = well_data[2:12]
-    trend3_data = well_data[11:17]
-    trend4_data = well_data[16:23]
+    trend1_data = well_data[0:15]
 
     trend1_data = calculate_and_add_slope_intercept_and_r_squared(trend1_data, 1)
-    trend2_data = calculate_and_add_slope_intercept_and_r_squared(trend2_data, 2)
-    trend3_data = calculate_and_add_slope_intercept_and_r_squared(trend3_data, 3)
-    trend4_data = calculate_and_add_slope_intercept_and_r_squared(trend4_data, 4)
-
-    return trend1_data[:-1] + trend2_data[:-1] + trend3_data[:-1] + trend4_data
+    return trend1_data
 
 
 def calculate_and_add_slope_intercept_and_r_squared(trend_line_data, trend_number):
@@ -119,19 +109,19 @@ def extend_timelines(well_data):
 
     well_data.append({
         'start_time': future_time,
-        'cpi_slope_4': well_data[-1]['cpi_slope_4'],
-        'cpi_intercept_4': well_data[-1]['cpi_intercept_4'],
-        'cpi_r_squared_4': well_data[-1]['cpi_r_squared_4'],
+        'cpi_slope_1': well_data[-1]['cpi_slope_1'],
+        'cpi_intercept_1': well_data[-1]['cpi_intercept_1'],
+        'cpi_r_squared_1': well_data[-1]['cpi_r_squared_1'],
         'cpi_alarm_lower_limit': well_data[-1]['cpi_alarm_lower_limit'],
         'cpi_alarm_upper_limit': well_data[-1]['cpi_alarm_upper_limit'],
-        'rpi_slope_4': well_data[-1]['rpi_slope_4'],
-        'rpi_intercept_4': well_data[-1]['rpi_intercept_4'],
-        'rpi_r_squared_4': well_data[-1]['rpi_r_squared_4'],
+        'rpi_slope_1': well_data[-1]['rpi_slope_1'],
+        'rpi_intercept_1': well_data[-1]['rpi_intercept_1'],
+        'rpi_r_squared_1': well_data[-1]['rpi_r_squared_1'],
         'rpi_alarm_lower_limit': well_data[-1]['rpi_alarm_lower_limit'],
         'rpi_alarm_upper_limit': well_data[-1]['rpi_alarm_upper_limit'],
-        'wpi_slope_4': well_data[-1]['wpi_slope_4'],
-        'wpi_intercept_4': well_data[-1]['wpi_intercept_4'],
-        'wpi_r_squared_4': well_data[-1]['wpi_r_squared_4'],
+        'wpi_slope_1': well_data[-1]['wpi_slope_1'],
+        'wpi_intercept_1': well_data[-1]['wpi_intercept_1'],
+        'wpi_r_squared_1': well_data[-1]['wpi_r_squared_1'],
         'wpi_alarm_lower_limit': well_data[-1]['wpi_alarm_lower_limit'],
         'wpi_alarm_upper_limit': well_data[-1]['wpi_alarm_upper_limit'],
     })
