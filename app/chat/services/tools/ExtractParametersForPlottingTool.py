@@ -6,15 +6,16 @@ from langchain_core.pydantic_v1 import BaseModel, Field
 
 
 class ExtractParametersForPlottingStructuredOutputFormat(BaseModel):
-    x_axis_dimension: str = Field(default="start_time", description="""X-axis dimension, possible values are start_time, 
-                                                                    pressure and temperature. start_time is default if 
+    x_axis_dimension: str = Field(default="start_time", description="""X-axis dimension, possible values are start_time and 
+                                                                    pressure. start_time is default if 
                                                                     not specified""")
 
     y_axis_dimensions: list[str] = Field(default=["wpi", "rpi", "cpi"],
                                          description="""Y-axis dimensions, possible values "
                                                      "are wpi (well), rpi (reservoir) and cpi (connection) productivity 
                                                      indicator, any combination of those three are valid. If the user 
-                                                     does not specify what kind of data, then set all three""")
+                                                     does not specify what kind of data, then set all three. 
+                                                     If X-axis dimension is pressure, then only set rpi.""")
 
     graph_description: str = Field(default="A graph showing the performance of the well over time.",
                                    description="""A description of the graph that will be generated. Mention what

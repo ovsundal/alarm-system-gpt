@@ -39,7 +39,7 @@ def extract_data_from_llm_response(well_name, data_params):
         return None
 
     # filter based on llm response parameters
-    required_attributes = [well_name, x_axis_dimension] + y_axis_dimensions
+    required_attributes = [well_name, x_axis_dimension, "start_time"] + y_axis_dimensions
 
     filtered_data = [{k: item[k] for k in required_attributes if k in item}
                      for item in well_data]
@@ -64,17 +64,18 @@ def get_outside_alarm_limits(data_to_plot, alarm_limits):
                 }
                 if 'start_time' in datapoint:
                     datapoint_outside_limit['start_time'] = round(datapoint['start_time'])
+                    alarm_info.append(f"The alarm for {alarm_type} is {datapoint_outside_limit['status']} at "
+                                      f"{datapoint_outside_limit['start_time']}.")
                 if 'pressure' in datapoint:
                     datapoint_outside_limit['pressure'] = round(datapoint['pressure'])
-                if 'temperature' in datapoint:
-                    datapoint_outside_limit['temperature'] = round(datapoint['temperature'])
-                alarm_info.append(f"The alarm for {alarm_type} is {datapoint_outside_limit['status']} at "
-                                  f"{datapoint_outside_limit['start_time']}.")
 
     return alarm_info
 
 
 def extract_trend_info(json_data):
+    if 'start_time' not in json_data[0]:
+        return json_data
+
     trend_info = []
 
     if 'cpi' in json_data[0]:
@@ -123,3 +124,12 @@ def calculate_trend_response(performance_indicator, rpi_alarms, cpi_alarms, wpi_
                 """)
 
     return response
+
+
+def round_numbers(well_data):
+    for data in well_data:
+        data['start_time'] = round(data['start_time'])
+        data['pressure'] = round(data['pressure'], 2)
+        data['rpi'] = round(data['rpi'], 2)
+
+    return well_data

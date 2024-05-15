@@ -52,8 +52,8 @@ class ReservoirMeasurementViewSet(
         processed_data = filter_reservoir_data(filtered_sorted_data)
         processed_data = add_alarm_limits_to_reservoir_data(
             processed_data, alarms_list)
-        processed_data = round_numbers(processed_data)
         processed_data = calculate_time_vs_pi_trend_lines(processed_data)
+        processed_data = round_numbers(processed_data)
 
         future_years_to_extend = 1
         for i in range(future_years_to_extend):
