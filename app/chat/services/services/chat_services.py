@@ -129,7 +129,13 @@ def calculate_trend_response(performance_indicator, rpi_alarms, cpi_alarms, wpi_
 def round_numbers(well_data):
     for data in well_data:
         data['start_time'] = round(data['start_time'])
-        data['pressure'] = round(data['pressure'], 2)
-        data['rpi'] = round(data['rpi'], 2)
+        if 'rpi' in data:
+            data['rpi'] = round(data['rpi'], 2)
+        if 'wpi' in data:
+            data['wpi'] = round(data['wpi'], 2)
+        if 'cpi' in data:
+            data['cpi'] = round(data['cpi'], 2)
+        if 'pressure' in data:
+            data['pressure'] = round(data['pressure'], 2)
 
     return well_data
