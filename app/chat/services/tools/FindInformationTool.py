@@ -32,7 +32,7 @@ class FindInformationTool(BaseTool):
         template = """
         Use the following pieces of context to answer the question at the end. If you can't find the answer in context, 
         just say that you don't know, don't try to make up an answer. Use three sentences maximum, and keep the answer 
-        as concise as possible. Always include the name of the pdf you got the information from, along with the page
+        as concise as possible. Always include the name of the source you got the information from, along with the page
         number at the end of the answer.
         {context}
         Question: {question}

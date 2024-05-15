@@ -14,7 +14,7 @@ def get_chat_prompt():
              chat_response: 
                        If you ran the ExtractParametersForPlottingTool: 
                            if you were able to extract data params, inform the user that the graph has been plot.
-                           Mention what parameters were plot, and that the graph can be seen in the LLM response pane 
+                           Mention what parameters were plot, and that the graph can be seen in the AI agent response pane 
                         If you ran the FindInformationTool:
                             If you were able to find information, return the information to the user, if not, 
                             inform the user that the information could not be found.

@@ -106,15 +106,6 @@ def calculate_trend_response(performance_indicator, rpi_alarms, cpi_alarms, wpi_
     # find correct well data
     well_data = [item for item in static_reservoir_data if item['well_name'] == well_name]
 
-    # if trend_number == 1:
-    #     well_data = well_data[0:3]
-    # elif trend_number == 2:
-    #     well_data = well_data[2:12]
-    # elif trend_number == 3:
-    #     well_data = well_data[11:17]
-    # elif trend_number == 4:
-    #     well_data = well_data[16:23]
-
     times = [data['start_time'] for data in well_data]
     alarms = rpi_alarms if performance_indicator == 'rpi' else cpi_alarms if performance_indicator == 'cpi' \
         else wpi_alarms
