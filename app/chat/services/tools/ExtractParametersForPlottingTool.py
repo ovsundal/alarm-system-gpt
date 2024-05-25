@@ -17,7 +17,8 @@ class ExtractParametersForPlottingStructuredOutputFormat(BaseModel):
                                                      does not specify what kind of data, then set all three. 
                                                      If X-axis dimension is pressure, then only set rpi. If the user 
                                                      asks for another performance indicator plot against pressure, 
-                                                     then inform the user that only rpi can be plot against pressure and do that.""")
+                                                     then inform the user that only rpi can be plot against pressure and 
+                                                     do that.""")
 
     graph_description: str = Field(default="A graph showing the performance of the well over time.",
                                    description="""A description of the graph that will be generated. Mention what

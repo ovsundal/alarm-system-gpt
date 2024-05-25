@@ -31,9 +31,10 @@ class FindInformationTool(BaseTool):
     def _run(self, user_query):
         template = """
         Use the following pieces of context to answer the question at the end. If you can't find the answer in context, 
-        just say that you don't know, don't try to make up an answer. Use three sentences maximum, and keep the answer 
-        as concise as possible. Always include the name of the source you got the information from, along with the page
-        number at the end of the answer.
+        just say that you don't know, don't try to make up an answer. Also, only answer questions related to the oil and 
+        gas domain. Use three sentences maximum, and keep the answer as concise as possible. Always include the name of 
+        the source you got the information from, along with the page number at the end of the answer. Also remove any 
+        references to figures or tables in your final answer.
         {context}
         Question: {question}
         Helpful Answer:
