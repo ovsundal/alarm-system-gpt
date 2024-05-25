@@ -21,7 +21,9 @@ class ExtractParametersForPlottingStructuredOutputFormat(BaseModel):
 
     graph_description: str = Field(default="A graph showing the performance of the well over time.",
                                    description="""A description of the graph that will be generated. Mention what
-                                               parameters the graph is showing, on both x and y axis. """)
+                                               parameters the graph is showing, on both x and y axis. All y-parameters 
+                                               plotted will have their alarms added later, so, for instance, if you
+                                               plot wpi, wpi-alarm will also be plot.""")
 
     class Config:
         schema_extra = {

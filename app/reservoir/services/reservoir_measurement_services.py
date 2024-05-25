@@ -48,7 +48,7 @@ def calculate_and_add_slope_intercept_and_r_squared(trend_line_data, trend_numbe
 
     times = [data['start_time'] for data in trend_line_data]
 
-    # when used by the LLM, different kind of data may be available, so build in checks to handle data processing
+    # when used by the agent, different kind of data may be available, so build in checks to handle data processing
     if 'cpi' in trend_line_data[0]:
         cpi_values = [data['cpi'] for data in trend_line_data]
         (cpi_slope, cpi_intercept), residuals, _, _, _ = np.polyfit(times, cpi_values, 1, full=True)
