@@ -126,6 +126,34 @@ def calculate_trend_response(performance_indicator, rpi_alarms, cpi_alarms, wpi_
     return response
 
 
+def calculate_pressure_range_response(trend_info, well_name):
+    if trend_info['level_indicator'] is None or trend_info['threshold_value'] is None:
+        return """Please use the following format to ask about the pressure range:
+        (example: "what is the safe pressure range for cpi above 0.8?").
+        """
+    else:
+        with open('reservoir/data/static_reservoir_data.json', 'r') as f:
+            static_reservoir_data = json.load(f)
+
+        # find correct well data
+        well_data = [item for item in static_reservoir_data if item['well_name'] == well_name]
+
+        if trend_info['level_indicator'] == 'above':
+            filtered_data = [item for item in well_data if
+                             item[trend_info['performance_indicator']] > trend_info['threshold_value']]
+        else:
+            filtered_data = [item for item in well_data if
+                             item[trend_info['performance_indicator']] <= trend_info['threshold_value']]
+
+        min_pressure = min(item['pressure'] for item in filtered_data if 'pressure' in item)
+        max_pressure = max(item['pressure'] for item in filtered_data if 'pressure' in item)
+
+        return f"""
+        To maintain {trend_info['performance_indicator']} {trend_info['level_indicator']} {trend_info['threshold_value']},
+        the safe pressure range is between {round(min_pressure, 2)} and {round(max_pressure, 2)} bars.
+        """
+
+
 def round_numbers(well_data):
     for data in well_data:
         data['start_time'] = round(data['start_time'])

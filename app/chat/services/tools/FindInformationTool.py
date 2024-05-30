@@ -18,13 +18,6 @@ class FindInformationTool(BaseTool):
     name = "FindInformationTool"
     description = """Searches a vector database for information that answers the user query. USe this tool for 
     general questions that can be answered with text. 
-    Example questions are:
-        -What are performance indicators?
-        -What is cpi?
-        -What does it mean when wpi drops?
-        -How can i prevent a drop of wpi?
-    
-    This tool is used
     Always run this tool if the user query is classified as a knowledge search.
     """
 

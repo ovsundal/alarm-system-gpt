@@ -23,9 +23,8 @@ def get_chat_prompt():
                             extract_data_params: add extracted parameters from AnswerHistoryQuestionsTool here. 
              }}
              trends: This object should be null unless the ExtractParametersForEvaluatingTrendTool was run. 
-                       If so, add the following object:
-                            performance_indicator: add extracted parameters from ExtractParametersForEvaluatingTrendTool 
-                            here.
+             If so, add the add extracted parameters from ExtractParametersForEvaluatingTrendTool in here.
+
              It must be possible to parse this json object using a json.loads() function in Python.
              """),
             MessagesPlaceholder("chat_history", optional=True),

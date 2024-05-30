@@ -7,7 +7,8 @@ from rest_framework.viewsets import GenericViewSet
 from chat.models.chat_model import Chat
 from chat.serializers.chat_serializer import ChatSerializer
 from chat.services.services.chat_services import ask_openai, extract_data_from_llm_response, set_alarm_limits, \
-    get_outside_alarm_limits, extract_trend_info, calculate_trend_response, round_numbers
+    get_outside_alarm_limits, extract_trend_info, calculate_trend_response, round_numbers, \
+    calculate_pressure_range_response
 from reservoir.services.reservoir_measurement_services import calculate_time_vs_pi_trend_lines
 
 
@@ -64,10 +65,12 @@ class ChatViewSet(GenericViewSet, CreateModelMixin):
                                    cpi_alarms,
                                    wpi_alarms,
                                    well_name):
-
-        llm_response['chat_response'] = calculate_trend_response(llm_response['trends']['performance_indicator'],
-                                                                 rpi_alarms,
-                                                                 cpi_alarms,
-                                                                 wpi_alarms, well_name)
+        if llm_response['trends']['action'] == 'trend':
+            llm_response['chat_response'] = calculate_trend_response(llm_response['trends']['performance_indicator'],
+                                                                     rpi_alarms,
+                                                                     cpi_alarms,
+                                                                     wpi_alarms, well_name)
+        else:
+            llm_response['chat_response'] = calculate_pressure_range_response(llm_response['trends'], well_name)
 
         return Response(llm_response)
