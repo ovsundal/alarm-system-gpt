@@ -1,24 +1,15 @@
-# Alarm System GPT
+# The following software is necessary to run this application locally:
+- Python 3.7+
+- Pip
 
-### Build the project
-`docker-compose build`
-
-### Run the project
-`docker-compose up`
-
-### To run tests and linter:
-`docker-compose run --rm app sh -c "python manage.py test && flake8"`
-
-### To run a migration: 
-`docker-compose run --rm app sh -c "python manage.py makemigrations"`
-
-#### If package errors on docker-compose up, try 
-`docker-compose up --build`
-
-### View the API documentation
-http://localhost:8000/api/docs/
-
-### Chroma
-To recreate the vector database for embeddings, simply delete the app/Chroma folder. To add new data sources, add the 
-pdfs to the app/chat/services/background-knowledge folder and add them to the loader in FindInformationTool 
-_setup_and_feed_database() method.
+# To run the application locally, follow these steps:
+1. Clone the repository
+2. Copy the .env.sample file to a new file called .env
+3. Fill in the required environment variables (OPENAI_API_KEY and LANGCHAIN_API_KEY (optional, for tracing only)) in the .env file. 
+    - You can get the OPENAI_API_KEY from [https://openai.com/index/openai-api/]
+      (note that you also need OpenAI API credits to use the application)
+    - If you want to enable tracing, you also need LANGCHAIN_API_KEY from [https://python.langchain.com/v0.1/docs/get_started/quickstart/]
+4. Install the required dependencies by running `pip install -r requirements.txt`
+5. Run the application by running `python app.py`
+6. Open your browser and navigate to `http://localhost:5000/`
+```
