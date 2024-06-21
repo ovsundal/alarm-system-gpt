@@ -120,7 +120,7 @@ def calculate_trend_response(performance_indicator, rpi_alarms, cpi_alarms, wpi_
     response = (f"""
     The trend line for {performance_indicator} is y = {round(slope, 6)}*time(hours) + {round(intercept, 6)}. 
     For lower ({alarms[0]}) and upper ({alarms[1]}) alarms it will
-    exceed the alarm threshold at time {round(lower_alarm_time)} and {round(upper_alarm_time)}.
+    exceed the alarm threshold at time (hours) {round(lower_alarm_time)} and {round(upper_alarm_time)}.
                 """)
 
     return response
