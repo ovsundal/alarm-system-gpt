@@ -16,7 +16,10 @@ class ExtractParametersForPlottingStructuredOutputFormat(BaseModel):
                                                      indicator, any combination of those three are valid. If the user 
                                                      does not specify what kind of data, then set all three. 
                                                      If X-axis dimension is pressure, then only a single indicator 
-                                                     should be returned, with default is RPI. If the user wants to 
+                                                     should be returned, with default is RPI. 
+                                                     Example: If the user wants to plot WPI over pressure, then the
+                                                     x-axis dimension is pressure, and y-axis dimension is WPI. 
+                                                     If the user wants to 
                                                      plot several indicators over pressure, notify the user 
                                                      that only one indicator can be plotted at a time""")
 

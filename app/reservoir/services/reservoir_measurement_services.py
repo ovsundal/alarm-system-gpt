@@ -34,27 +34,27 @@ def round_numbers(well_data):
     return well_data
 
 
-def calculate_time_vs_pi_trend_lines(well_data):
+def calculate_pi_trend_lines(well_data, dimension='start_time'):
     trend1_data = well_data
 
-    trend1_data = calculate_and_add_slope_intercept_and_r_squared(trend1_data)
+    trend1_data = calculate_and_add_slope_intercept_and_r_squared(trend1_data, dimension)
     return trend1_data
 
 
-def calculate_and_add_slope_intercept_and_r_squared(trend_line_data):
+def calculate_and_add_slope_intercept_and_r_squared(trend_line_data, dimension):
     # if start_time is not available, predictions are impossible
     if 'start_time' not in trend_line_data[0]:
         return trend_line_data
 
-    times = [data['start_time'] for data in trend_line_data]
+    dimension_values = [data[dimension] for data in trend_line_data]
 
     # when used by the agent, different kind of data may be available, so build in checks to handle data processing
-    keys = ['cpi', 'rpi', 'wpi', 'pressure']
+    keys = ['cpi', 'rpi', 'wpi']
 
     for key in keys:
         if key in trend_line_data[0]:
             values = [data[key] for data in trend_line_data]
-            slope, intercept, r_squared = calculate_polyfit_and_r_squared(times, values)
+            slope, intercept, r_squared = calculate_polyfit_and_r_squared(dimension_values, values)
 
             for data in trend_line_data:
                 data[f'{key}_slope_1'] = slope

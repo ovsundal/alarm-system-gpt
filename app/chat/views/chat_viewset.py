@@ -9,7 +9,7 @@ from chat.serializers.chat_serializer import ChatSerializer
 from chat.services.services.chat_services import ask_openai, extract_data_from_llm_response, set_alarm_limits, \
     get_outside_alarm_limits, extract_trend_info, calculate_trend_response, round_numbers, \
     calculate_pressure_range_response
-from reservoir.services.reservoir_measurement_services import calculate_time_vs_pi_trend_lines
+from reservoir.services.reservoir_measurement_services import calculate_pi_trend_lines
 
 
 class ChatViewSet(GenericViewSet, CreateModelMixin):
@@ -53,8 +53,8 @@ class ChatViewSet(GenericViewSet, CreateModelMixin):
                                                                               llm_response['plotting']['alarm_limits'])
 
         # trends
-        llm_response['plotting']['data_to_plot'] = calculate_time_vs_pi_trend_lines(
-            llm_response['plotting']['data_to_plot'])
+        llm_response['plotting']['data_to_plot'] = calculate_pi_trend_lines(
+            llm_response['plotting']['data_to_plot'], llm_response['plotting']['extract_data_params']['x_axis_dimension'])
         llm_response['plotting']['trend_response'] = extract_trend_info(llm_response['plotting']['data_to_plot'])
         llm_response['plotting']['data_to_plot'] = round_numbers(llm_response['plotting']['data_to_plot'])
 
