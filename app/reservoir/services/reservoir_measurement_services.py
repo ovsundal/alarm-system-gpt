@@ -64,6 +64,34 @@ def calculate_and_add_slope_intercept_and_r_squared(trend_line_data, dimension):
     return trend_line_data
 
 
+def calculate_and_add_slope_intercept_and_r_squared_for_benchmark(trend_line_data):
+    # if start_time is not available, predictions are impossible
+    if 'start_time' not in trend_line_data[0]:
+        return trend_line_data
+
+    times = [data['start_time'] for data in trend_line_data]
+    pressures = [data['pressure'] for data in trend_line_data]
+
+    # when used by the agent, different kind of data may be available, so build in checks to handle data processing
+    keys = ['cpi', 'rpi', 'wpi']
+
+    for key in keys:
+        if key in trend_line_data[0]:
+            values = [data[key] for data in trend_line_data]
+            slope_time, intercept_time, r_squared_time = calculate_polyfit_and_r_squared(times, values)
+            slope_pressure, intercept_pressure, r_squared_pressure = calculate_polyfit_and_r_squared(pressures, values)
+
+            for data in trend_line_data:
+                data[f'{key}_slope_1'] = slope_time
+                data[f'{key}_intercept_1'] = intercept_time
+                data[f'{key}_r_squared_1'] = np.round(r_squared_time, 3).tolist()
+                data[f'{key}_slope_pressure_1'] = slope_pressure
+                data[f'{key}_intercept_pressure_1'] = intercept_pressure
+                data[f'{key}_r_squared_pressure_1'] = np.round(r_squared_pressure, 3).tolist()
+
+    return trend_line_data
+
+
 def calculate_polyfit_and_r_squared(x_values, y_values):
     (slope, intercept), residuals, _, _, _ = np.polyfit(x_values, y_values, 1, full=True)
     r_squared = 1 - residuals / (len(y_values) * np.var(y_values))

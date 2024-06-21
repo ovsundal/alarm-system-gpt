@@ -12,7 +12,7 @@ class ExtractParametersForPlottingStructuredOutputFormat(BaseModel):
 
     y_axis_dimensions: list[str] = Field(default=["wpi", "rpi", "cpi"],
                                          description="""Y-axis dimensions, possible values "
-                                                     "are wpi (well), rpi (reservoir) and cpi (connection) productivity 
+                                                     "are wpi (well), rpi (reservoir) and cpi (connection) performance 
                                                      indicator, any combination of those three are valid. If the user 
                                                      does not specify what kind of data, then set all three. 
                                                      If X-axis dimension is pressure, then only a single indicator 

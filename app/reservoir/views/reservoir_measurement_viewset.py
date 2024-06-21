@@ -11,7 +11,8 @@ from reservoir.serializers.reservoir_measurement_serializer import (
 from reservoir.services.reservoir_measurement_services import (
     filter_reservoir_data,
     add_alarm_limits_to_reservoir_data,
-    round_numbers, calculate_pi_trend_lines, extend_timelines
+    round_numbers, extend_timelines,
+    calculate_and_add_slope_intercept_and_r_squared_for_benchmark
 )
 
 
@@ -52,7 +53,7 @@ class ReservoirMeasurementViewSet(
         processed_data = filter_reservoir_data(filtered_sorted_data)
         processed_data = add_alarm_limits_to_reservoir_data(
             processed_data, alarms_list)
-        processed_data = calculate_pi_trend_lines(processed_data)
+        processed_data = calculate_and_add_slope_intercept_and_r_squared_for_benchmark(processed_data)
         processed_data = round_numbers(processed_data)
 
         future_years_to_extend = 1
