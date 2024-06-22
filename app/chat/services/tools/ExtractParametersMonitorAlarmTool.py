@@ -30,7 +30,7 @@ class ExtractParametersMonitorAlarmTool(BaseTool):
      Run this tool whenever the user query is evaluated to be in the 'evaluate trends' category.
      These parameters should be returned to the user,
      and will be used to extract well data outside of the LLM universe. Always run this tool if the user query is 
-     classified as am evaluate trends query.
+     classified as an monitor alarms query.
     """
 
     def _run(self, user_query):

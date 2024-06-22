@@ -20,7 +20,7 @@ def get_chat_prompt():
                             inform the user that the information could not be found.
              plotting: This object should be null unless the ExtractParametersForPlottingTool was run. 
                        If so, add the following object:
-                            extract_data_params: add extracted parameters from AnswerHistoryQuestionsTool here. 
+                            extract_data_params: add extracted parameters from FindInformationTool here. 
              trends: This object should be null unless the ExtractParametersForEvaluatingTrendTool was run. 
                        If so, add the add extracted parameters from ExtractParametersForEvaluatingTrendTool in here.
              }}
